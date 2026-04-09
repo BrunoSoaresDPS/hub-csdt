@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
+// Suporte a Vercel Postgres e DATABASE_URL local
 const prisma = new PrismaClient();
 
 async function main() {
