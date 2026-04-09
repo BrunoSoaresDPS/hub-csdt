@@ -7,6 +7,13 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: [],
+  },
+  // Disable static optimization for dashboard pages
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
+  },
 };
 
 export default nextConfig;

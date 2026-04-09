@@ -11,6 +11,9 @@ interface User {
   email: string;
 }
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);

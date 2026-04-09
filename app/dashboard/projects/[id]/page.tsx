@@ -8,6 +8,9 @@ interface Props {
   params: { id: string };
 }
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function ProjectPage({ params }: Props) {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
