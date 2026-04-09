@@ -5,9 +5,15 @@ import { useRouter } from 'next/navigation';
 import Topbar from '../../components/Topbar';
 import DashboardShell from '../../components/DashboardShell';
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
