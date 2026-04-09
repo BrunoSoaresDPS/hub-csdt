@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import StatusPill from './StatusPill';
+import { priorityLabels } from '../lib/validators';
 
 interface Project {
   id: string;
@@ -39,7 +40,7 @@ export default function ProjectTable({ projects }: { projects: Project[] }) {
               </td>
               <td className="px-4 py-4 text-slate-300">{project.owner}</td>
               <td className="px-4 py-4"><StatusPill value={project.status} /></td>
-              <td className="px-4 py-4 text-slate-300">{project.priority}</td>
+              <td className="px-4 py-4 text-slate-300">{priorityLabels[project.priority as keyof typeof priorityLabels] ?? project.priority}</td>
               <td className="px-4 py-4 text-slate-300">{new Date(project.endDate).toLocaleDateString()}</td>
               <td className="px-4 py-4">
                 <Link href={`/dashboard/projects/${project.id}`} className="rounded-2xl bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/20">

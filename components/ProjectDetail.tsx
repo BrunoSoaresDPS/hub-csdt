@@ -138,7 +138,7 @@ export default function ProjectDetail({ id }: { id: string }) {
                 Excluir projeto
               </button>
             </div>
-            {message ? <p className="text-sm text-rose-300">{message}</p> : null}
+            {message ? <p className={`text-sm ${message.includes('sucesso') ? 'text-emerald-300' : 'text-rose-300'}`}>{message}</p> : null}
           </form>
         </>
       ) : (

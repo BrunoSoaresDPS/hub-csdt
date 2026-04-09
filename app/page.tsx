@@ -12,11 +12,10 @@ export default function HomePage() {
     endDate: '',
     status: 'REVIEW',
     priority: 'MEDIUM',
-    file: null as File | null,
   });
   const [status, setStatus] = useState({ loading: false, message: '', error: false });
 
-  const handleChange = (key: string, value: string | File | null) => {
+  const handleChange = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -24,17 +23,11 @@ export default function HomePage() {
     event.preventDefault();
     setStatus({ loading: true, message: '', error: false });
 
-    const body = new FormData();
-    body.append('title', form.title);
-    body.append('description', form.description);
-    body.append('owner', form.owner);
-    body.append('startDate', form.startDate);
-    body.append('endDate', form.endDate);
-    body.append('status', form.status);
-    body.append('priority', form.priority);
-    if (form.file) body.append('file', form.file);
-
-    const response = await fetch('/api/projects/public', { method: 'POST', body });
+    const response = await fetch('/api/projects/public', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
     const data = await response.json();
     if (!response.ok) {
       setStatus({ loading: false, message: data.error || 'Erro ao enviar projeto.', error: true });
@@ -42,7 +35,7 @@ export default function HomePage() {
     }
 
     setStatus({ loading: false, message: 'Projeto enviado com sucesso! Obrigado.', error: false });
-    setForm({ title: '', description: '', owner: '', startDate: '', endDate: '', status: 'REVIEW', priority: 'MEDIUM', file: null });
+    setForm({ title: '', description: '', owner: '', startDate: '', endDate: '', status: 'REVIEW', priority: 'MEDIUM' });
   };
 
   return (
@@ -125,11 +118,6 @@ export default function HomePage() {
                   </select>
                 </label>
               </div>
-
-              <label className="block">
-                <span className="text-sm text-slate-300">Anexar arquivo (opcional)</span>
-                <input type="file" onChange={(e) => handleChange('file', e.target.files?.[0] ?? null)} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400" />
-              </label>
             </div>
 
             <button type="submit" disabled={status.loading} className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60">

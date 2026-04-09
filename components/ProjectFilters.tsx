@@ -1,5 +1,7 @@
 'use client';
 
+import { projectStatuses, priorityLabels } from '../lib/validators';
+
 interface ProjectFiltersProps {
   filters: {
     status: string;
@@ -13,9 +15,6 @@ interface ProjectFiltersProps {
   onApply: () => void;
 }
 
-const statusOptions = ['', 'REVIEW', 'APPROVED', 'IN_PROGRESS', 'COMPLETED'];
-const priorityOptions = ['', 'LOW', 'MEDIUM', 'HIGH'];
-
 export default function ProjectFilters({ filters, onChange, onApply }: ProjectFiltersProps) {
   return (
     <div className="grid gap-4 rounded-3xl border border-white/10 bg-slate-950/80 p-6 shadow-soft sm:grid-cols-3">
@@ -26,16 +25,18 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
       <div className="space-y-3">
         <label className="block text-sm text-slate-300">Status</label>
         <select value={filters.status} onChange={(e) => onChange('status', e.target.value)} className="w-full rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white outline-none">
-          {statusOptions.map((option) => (
-            <option key={option} value={option}>{option || 'Todos'}</option>
+          <option value="">Todos</option>
+          {Object.entries(projectStatuses).map(([value, label]) => (
+            <option key={value} value={value}>{label}</option>
           ))}
         </select>
       </div>
       <div className="space-y-3">
         <label className="block text-sm text-slate-300">Prioridade</label>
         <select value={filters.priority} onChange={(e) => onChange('priority', e.target.value)} className="w-full rounded-2xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white outline-none">
-          {priorityOptions.map((option) => (
-            <option key={option} value={option}>{option || 'Todas'}</option>
+          <option value="">Todas</option>
+          {Object.entries(priorityLabels).map(([value, label]) => (
+            <option key={value} value={value}>{label}</option>
           ))}
         </select>
       </div>
