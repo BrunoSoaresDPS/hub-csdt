@@ -1,23 +1,53 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { getUserFromToken } from '../../../../lib/auth';
-import ProjectDetail from '../../../../components/ProjectDetail';
+'use client';
 
-async function ensureAuth() {
-  const cookieStore = cookies();
-  const token = cookieStore.get('hub_token')?.value ?? null;
-  const user = await getUserFromToken(token);
-  return user;
-}
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import ProjectDetail from '../../../../components/ProjectDetail';
 
 interface Props {
   params: { id: string };
 }
 
-export default async function ProjectPage({ params }: Props) {
-  const user = await ensureAuth();
-  if (!user) {
-    redirect('/login');
+export default function ProjectPage({ params }: Props) {
+  const router = useRouter();
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const response = await fetch('/api/auth/check', {
+          credentials: 'include',
+        });
+        if (response.ok) {
+          setAuthenticated(true);
+        } else {
+          router.push('/login');
+        }
+      } catch (error) {
+        router.push('/login');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    checkAuth();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen px-6 py-10 sm:px-10">
+        <div className="mx-auto max-w-6xl">
+          <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-10 text-center text-slate-200">
+            Carregando...
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!authenticated) {
+    return null;
   }
 
   return (
