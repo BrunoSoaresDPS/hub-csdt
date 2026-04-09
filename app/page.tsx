@@ -3,18 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import IvecoLogo from '../components/IvecoLogo';
-import { projectStatuses, priorityLabels } from '../lib/validators';
 
 export default function HomePage() {
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    owner: '',
-    startDate: '',
-    endDate: '',
-    status: 'REVIEW',
-    priority: 'MEDIUM',
-  });
+  const [form, setForm] = useState({ title: '', description: '', owner: '' });
   const [status, setStatus] = useState({ loading: false, message: '', error: false });
 
   const handleChange = (key: string, value: string) => {
@@ -36,8 +27,8 @@ export default function HomePage() {
       return;
     }
 
-    setStatus({ loading: false, message: 'Projeto enviado com sucesso. Nossa equipe entrará em contato.', error: false });
-    setForm({ title: '', description: '', owner: '', startDate: '', endDate: '', status: 'REVIEW', priority: 'MEDIUM' });
+    setStatus({ loading: false, message: 'Projeto enviado com sucesso! Nossa equipe entrará em contato.', error: false });
+    setForm({ title: '', description: '', owner: '' });
   };
 
   return (
@@ -55,10 +46,8 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Blue accent line */}
       <div className="h-[3px] bg-[#1654FF]" />
 
-      {/* Main content */}
       <main className="flex-1 px-6 py-12 sm:px-10">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-12 lg:grid-cols-[1fr_480px] lg:gap-16 lg:items-start">
@@ -77,24 +66,19 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* Feature cards */}
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
                   { label: 'Rápido', desc: 'Formulário simples e direto' },
                   { label: 'Seguro', desc: 'Dados protegidos e criptografados' },
                   { label: 'Rastreável', desc: 'Acompanhe o status em tempo real' },
                 ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="iveco-card iveco-border-l rounded-l-none p-4 animate-fade-in"
-                  >
+                  <div key={item.label} className="iveco-card iveco-border-l rounded-l-none p-4 animate-fade-in">
                     <p className="text-sm font-bold text-white">{item.label}</p>
                     <p className="mt-1 text-xs text-[#555562]">{item.desc}</p>
                   </div>
                 ))}
               </div>
 
-              {/* Stats row */}
               <div className="flex flex-wrap gap-6 pt-2">
                 {[
                   { value: '100%', label: 'Gratuito' },
@@ -111,7 +95,6 @@ export default function HomePage() {
 
             {/* Right: form */}
             <div className="iveco-card animate-fade-in">
-              {/* Form header */}
               <div className="border-b border-[#232329] px-6 py-5">
                 <div className="flex items-center justify-between">
                   <div>
@@ -143,7 +126,7 @@ export default function HomePage() {
                     value={form.description}
                     onChange={(e) => handleChange('description', e.target.value)}
                     placeholder="Objetivos, escopo, entregas esperadas..."
-                    rows={4}
+                    rows={5}
                     className="iveco-input resize-none"
                   />
                 </div>
@@ -157,56 +140,6 @@ export default function HomePage() {
                     placeholder="Nome do responsável"
                     className="iveco-input"
                   />
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="iveco-label mb-1.5 block">Data de início</label>
-                    <input
-                      required
-                      type="date"
-                      value={form.startDate}
-                      onChange={(e) => handleChange('startDate', e.target.value)}
-                      className="iveco-input"
-                    />
-                  </div>
-                  <div>
-                    <label className="iveco-label mb-1.5 block">Data prevista</label>
-                    <input
-                      required
-                      type="date"
-                      value={form.endDate}
-                      onChange={(e) => handleChange('endDate', e.target.value)}
-                      className="iveco-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="iveco-label mb-1.5 block">Status</label>
-                    <select
-                      value={form.status}
-                      onChange={(e) => handleChange('status', e.target.value)}
-                      className="iveco-input"
-                    >
-                      {Object.entries(projectStatuses).map(([value, label]) => (
-                        <option key={value} value={value}>{label}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="iveco-label mb-1.5 block">Prioridade</label>
-                    <select
-                      value={form.priority}
-                      onChange={(e) => handleChange('priority', e.target.value)}
-                      className="iveco-input"
-                    >
-                      {Object.entries(priorityLabels).map(([value, label]) => (
-                        <option key={value} value={value}>{label}</option>
-                      ))}
-                    </select>
-                  </div>
                 </div>
 
                 <div className="pt-2">
@@ -229,24 +162,22 @@ export default function HomePage() {
                   </button>
 
                   {status.message && (
-                    <div
-                      className={`mt-3 rounded-lg border px-4 py-3 text-sm ${
-                        status.error
-                          ? 'border-rose-500/30 bg-rose-500/10 text-rose-300'
-                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
-                      }`}
-                    >
+                    <div className={`mt-3 rounded-lg border px-4 py-3 text-sm ${
+                      status.error
+                        ? 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+                        : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                    }`}>
                       {status.message}
                     </div>
                   )}
                 </div>
               </form>
             </div>
+
           </div>
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-[#17171b] py-6 text-center">
         <p className="text-xs text-[#333340]">
           © {new Date().getFullYear()} IVECO Hub CSDT. Todos os direitos reservados.
