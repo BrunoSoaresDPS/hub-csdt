@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import IvecoLogo from '../components/IvecoLogo';
 import { projectStatuses, priorityLabels } from '../lib/validators';
 
 export default function HomePage() {
@@ -34,102 +36,222 @@ export default function HomePage() {
       return;
     }
 
-    setStatus({ loading: false, message: 'Projeto enviado com sucesso! Obrigado.', error: false });
+    setStatus({ loading: false, message: 'Projeto enviado com sucesso. Nossa equipe entrará em contato.', error: false });
     setForm({ title: '', description: '', owner: '', startDate: '', endDate: '', status: 'REVIEW', priority: 'MEDIUM' });
   };
 
   return (
-    <main className="min-h-screen px-6 py-10 sm:px-10">
-      <section className="mx-auto max-w-6xl rounded-3xl border border-white/10 bg-slate-950/80 p-8 shadow-soft backdrop-blur-xl">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-6">
-            <span className="inline-flex items-center rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200">
-              HUB DE PROJETOS • CRM
-            </span>
-            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-              Cadastre seu projeto com rapidez e segurança.
-            </h1>
-            <p className="max-w-xl text-slate-300">
-              Qualquer pessoa pode registrar novos projetos. O time responsável receberá as informações e poderá gerenciar tudo no painel administrativo.
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-3xl bg-white/5 p-5">
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Status</p>
-                <p className="mt-2 text-xl font-semibold text-white">Em análise</p>
+    <div className="min-h-dvh flex flex-col">
+      {/* Top bar */}
+      <header className="border-b border-[#1a1a1e] bg-[#080808]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <IvecoLogo size="md" showTagline />
+          <Link
+            href="/login"
+            className="text-xs font-semibold uppercase tracking-[0.12em] text-[#555562] transition-colors hover:text-white"
+          >
+            Acesso admin →
+          </Link>
+        </div>
+      </header>
+
+      {/* Blue accent line */}
+      <div className="h-[3px] bg-[#1654FF]" />
+
+      {/* Main content */}
+      <main className="flex-1 px-6 py-12 sm:px-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-12 lg:grid-cols-[1fr_480px] lg:gap-16 lg:items-start">
+
+            {/* Left: hero */}
+            <div className="space-y-8 pt-2">
+              <div className="space-y-2">
+                <p className="iveco-label text-[#1654FF]">Portal de Projetos</p>
+                <h1 className="text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  Registre seu<br />
+                  <span className="text-[#1654FF]">projeto</span>{' '}
+                  aqui.
+                </h1>
+                <p className="mt-4 max-w-md text-base text-[#9999a8] leading-relaxed">
+                  Qualquer pessoa pode submeter novos projetos. Nosso time administrativo receberá, avaliará e gerenciará cada solicitação no painel interno.
+                </p>
               </div>
-              <div className="rounded-3xl bg-white/5 p-5">
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Entrega</p>
-                <p className="mt-2 text-xl font-semibold text-white">Fluxo moderno</p>
+
+              {/* Feature cards */}
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: 'Rápido', desc: 'Formulário simples e direto' },
+                  { label: 'Seguro', desc: 'Dados protegidos e criptografados' },
+                  { label: 'Rastreável', desc: 'Acompanhe o status em tempo real' },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="iveco-card iveco-border-l rounded-l-none p-4 animate-fade-in"
+                  >
+                    <p className="text-sm font-bold text-white">{item.label}</p>
+                    <p className="mt-1 text-xs text-[#555562]">{item.desc}</p>
+                  </div>
+                ))}
               </div>
+
+              {/* Stats row */}
+              <div className="flex flex-wrap gap-6 pt-2">
+                {[
+                  { value: '100%', label: 'Gratuito' },
+                  { value: '< 2 min', label: 'Para preencher' },
+                  { value: '24h', label: 'Resposta média' },
+                ].map((s) => (
+                  <div key={s.label} className="space-y-1">
+                    <p className="text-2xl font-black text-white">{s.value}</p>
+                    <p className="text-xs text-[#555562] uppercase tracking-[0.1em]">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: form */}
+            <div className="iveco-card animate-fade-in">
+              {/* Form header */}
+              <div className="border-b border-[#232329] px-6 py-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="iveco-label text-[#1654FF]">Novo projeto</p>
+                    <h2 className="mt-1 text-lg font-bold text-white">Formulário de submissão</h2>
+                  </div>
+                  <span className="rounded-full border border-[#232329] bg-[#17171b] px-3 py-1 text-xs font-medium text-[#9999a8]">
+                    Público · Sem login
+                  </span>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4 p-6">
+                <div>
+                  <label className="iveco-label mb-1.5 block">Nome do projeto</label>
+                  <input
+                    required
+                    value={form.title}
+                    onChange={(e) => handleChange('title', e.target.value)}
+                    placeholder="Ex: Expansão de frota Sul"
+                    className="iveco-input"
+                  />
+                </div>
+
+                <div>
+                  <label className="iveco-label mb-1.5 block">Descrição</label>
+                  <textarea
+                    required
+                    value={form.description}
+                    onChange={(e) => handleChange('description', e.target.value)}
+                    placeholder="Objetivos, escopo, entregas esperadas..."
+                    rows={4}
+                    className="iveco-input resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="iveco-label mb-1.5 block">Responsável</label>
+                  <input
+                    required
+                    value={form.owner}
+                    onChange={(e) => handleChange('owner', e.target.value)}
+                    placeholder="Nome do responsável"
+                    className="iveco-input"
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="iveco-label mb-1.5 block">Data de início</label>
+                    <input
+                      required
+                      type="date"
+                      value={form.startDate}
+                      onChange={(e) => handleChange('startDate', e.target.value)}
+                      className="iveco-input"
+                    />
+                  </div>
+                  <div>
+                    <label className="iveco-label mb-1.5 block">Data prevista</label>
+                    <input
+                      required
+                      type="date"
+                      value={form.endDate}
+                      onChange={(e) => handleChange('endDate', e.target.value)}
+                      className="iveco-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="iveco-label mb-1.5 block">Status</label>
+                    <select
+                      value={form.status}
+                      onChange={(e) => handleChange('status', e.target.value)}
+                      className="iveco-input"
+                    >
+                      {Object.entries(projectStatuses).map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="iveco-label mb-1.5 block">Prioridade</label>
+                    <select
+                      value={form.priority}
+                      onChange={(e) => handleChange('priority', e.target.value)}
+                      className="iveco-input"
+                    >
+                      {Object.entries(priorityLabels).map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={status.loading}
+                    className="iveco-btn-primary w-full py-3 text-base"
+                  >
+                    {status.loading ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                        </svg>
+                        Enviando...
+                      </span>
+                    ) : (
+                      'Enviar projeto'
+                    )}
+                  </button>
+
+                  {status.message && (
+                    <div
+                      className={`mt-3 rounded-lg border px-4 py-3 text-sm ${
+                        status.error
+                          ? 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                      }`}
+                    >
+                      {status.message}
+                    </div>
+                  )}
+                </div>
+              </form>
             </div>
           </div>
-
-          <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-slate-900/95 p-8 shadow-xl">
-            <div className="mb-8 flex items-center justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Novo projeto</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">Formulário público</h2>
-              </div>
-              <span className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs text-cyan-200">Sem login</span>
-            </div>
-
-            <div className="space-y-4">
-              <label className="block">
-                <span className="text-sm text-slate-300">Nome do projeto</span>
-                <input required value={form.title} onChange={(e) => handleChange('title', e.target.value)} placeholder="Projeto Aurora" className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400" />
-              </label>
-
-              <label className="block">
-                <span className="text-sm text-slate-300">Descrição detalhada</span>
-                <textarea required value={form.description} onChange={(e) => handleChange('description', e.target.value)} placeholder="Objetivos, escopo e pontos-chave..." rows={5} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400" />
-              </label>
-
-              <label className="block">
-                <span className="text-sm text-slate-300">Responsável</span>
-                <input required value={form.owner} onChange={(e) => handleChange('owner', e.target.value)} placeholder="Nome do responsável" className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400" />
-              </label>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block">
-                  <span className="text-sm text-slate-300">Data de início</span>
-                  <input required type="date" value={form.startDate} onChange={(e) => handleChange('startDate', e.target.value)} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400" />
-                </label>
-                <label className="block">
-                  <span className="text-sm text-slate-300">Data prevista</span>
-                  <input required type="date" value={form.endDate} onChange={(e) => handleChange('endDate', e.target.value)} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400" />
-                </label>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block">
-                  <span className="text-sm text-slate-300">Status</span>
-                  <select value={form.status} onChange={(e) => handleChange('status', e.target.value)} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400">
-                    {Object.entries(projectStatuses).map(([value, label]) => (
-                      <option key={value} value={value}>{label}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="text-sm text-slate-300">Prioridade</span>
-                  <select value={form.priority} onChange={(e) => handleChange('priority', e.target.value)} className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-cyan-400">
-                    {Object.entries(priorityLabels).map(([value, label]) => (
-                      <option key={value} value={value}>{label}</option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            </div>
-
-            <button type="submit" disabled={status.loading} className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60">
-              {status.loading ? 'Enviando...' : 'Enviar projeto'}
-            </button>
-
-            {status.message ? (
-              <p className={`mt-4 text-sm ${status.error ? 'text-rose-300' : 'text-emerald-300'}`}>{status.message}</p>
-            ) : null}
-          </form>
         </div>
-      </section>
-    </main>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-[#17171b] py-6 text-center">
+        <p className="text-xs text-[#333340]">
+          © {new Date().getFullYear()} IVECO Hub CSDT. Todos os direitos reservados.
+        </p>
+      </footer>
+    </div>
   );
 }

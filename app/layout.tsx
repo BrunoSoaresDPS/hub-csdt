@@ -1,14 +1,21 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  title: 'Hub CSDT | CRM de Projetos',
-  description: 'Plataforma de gestão de projetos estilo CRM com cadastro público e painel administrativo.',
+  title: 'IVECO Hub CSDT',
+  description: 'Plataforma de gestão de projetos IVECO — CRM administrativo.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

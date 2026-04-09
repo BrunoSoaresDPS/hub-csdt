@@ -3,14 +3,18 @@
 import { projectStatuses } from '../lib/validators';
 
 const colorMap: Record<string, string> = {
-  REVIEW: 'bg-amber-500/15 text-amber-200',
-  APPROVED: 'bg-emerald-500/15 text-emerald-200',
-  IN_PROGRESS: 'bg-sky-500/15 text-sky-200',
-  COMPLETED: 'bg-violet-500/15 text-violet-200',
+  REVIEW: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  APPROVED: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+  IN_PROGRESS: 'border-[#1654FF]/30 bg-[#1654FF]/10 text-[#7B9FFF]',
+  COMPLETED: 'border-slate-500/30 bg-slate-500/10 text-slate-400',
 };
 
 export default function StatusPill({ value }: { value: string }) {
   const label = projectStatuses[value as keyof typeof projectStatuses] ?? value.replace('_', ' ');
-  const color = colorMap[value] ?? 'bg-slate-700 text-slate-100';
-  return <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${color}`}>{label}</span>;
+  const color = colorMap[value] ?? 'border-[#232329] bg-[#17171b] text-[#9999a8]';
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${color}`}>
+      {label}
+    </span>
+  );
 }

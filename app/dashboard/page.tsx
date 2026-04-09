@@ -11,7 +11,6 @@ interface User {
   email: string;
 }
 
-// Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
 export default function DashboardPage() {
@@ -22,47 +21,46 @@ export default function DashboardPage() {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const response = await fetch('/api/auth/check', {
-          credentials: 'include',
-        });
+        const response = await fetch('/api/auth/check', { credentials: 'include' });
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
         } else {
           router.push('/login');
         }
-      } catch (error) {
+      } catch {
         router.push('/login');
       } finally {
         setLoading(false);
       }
     }
-
     checkAuth();
   }, [router]);
 
   if (loading) {
     return (
-      <main className="min-h-screen px-6 py-10 sm:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-10 text-center text-slate-200">
-            Carregando...
-          </div>
+      <div className="min-h-dvh flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <svg className="h-6 w-6 animate-spin text-[#1654FF]" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          </svg>
+          <p className="text-sm text-[#555562]">Verificando acesso...</p>
         </div>
-      </main>
+      </div>
     );
   }
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
-    <main className="min-h-screen px-6 py-10 sm:px-10">
-      <div className="mx-auto max-w-7xl">
-        <Topbar title={`Olá, ${user.name}`} />
-        <DashboardShell />
-      </div>
-    </main>
+    <div className="min-h-dvh">
+      <Topbar title={`Olá, ${user.name}`} />
+      <main className="px-6 pb-12 sm:px-8">
+        <div className="mx-auto max-w-7xl">
+          <DashboardShell />
+        </div>
+      </main>
+    </div>
   );
 }

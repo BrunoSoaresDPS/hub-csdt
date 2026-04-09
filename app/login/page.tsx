@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import IvecoLogo from '../../components/IvecoLogo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,29 +29,98 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen px-6 py-10 sm:px-10">
-      <div className="mx-auto max-w-xl rounded-3xl border border-white/10 bg-slate-950/80 p-10 shadow-soft">
-        <div className="mb-8 space-y-3">
-          <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">Área administrativa</p>
-          <h1 className="text-4xl font-semibold text-white">Acesse o painel</h1>
-          <p className="text-slate-400">Entre com suas credenciais para gerenciar os projetos cadastrados.</p>
-        </div>
+    <div className="min-h-dvh flex flex-col">
+      {/* Blue top line */}
+      <div className="h-[3px] bg-[#1654FF]" />
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <label className="block">
-            <span className="text-sm text-slate-300">Email</span>
-            <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="admin@hubcsdt.com" className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none focus:border-cyan-400" />
-          </label>
-          <label className="block">
-            <span className="text-sm text-slate-300">Senha</span>
-            <input type="password" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="********" className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none focus:border-cyan-400" />
-          </label>
-          <button type="submit" disabled={status.loading} className="w-full rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60">
-            {status.loading ? 'Entrando...' : 'Entrar no painel'}
-          </button>
-          {status.message ? <p className={`text-sm ${status.error ? 'text-rose-300' : 'text-emerald-300'}`}>{status.message}</p> : null}
-        </form>
+      <div className="flex flex-1 items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm animate-fade-in">
+
+          {/* Logo */}
+          <div className="mb-10 text-center">
+            <div className="mb-3 flex justify-center">
+              <IvecoLogo size="lg" />
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#555562]">
+              Hub CSDT · Área Administrativa
+            </p>
+          </div>
+
+          {/* Card */}
+          <div className="iveco-card overflow-hidden">
+            <div className="border-b border-[#232329] px-6 py-5">
+              <h1 className="text-lg font-bold text-white">Acesso ao painel</h1>
+              <p className="mt-1 text-sm text-[#555562]">
+                Entre com suas credenciais para gerenciar os projetos.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4 p-6">
+              <div>
+                <label className="iveco-label mb-1.5 block">E-mail</label>
+                <input
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="admin@hubcsdt.com"
+                  className="iveco-input"
+                  autoComplete="email"
+                />
+              </div>
+
+              <div>
+                <label className="iveco-label mb-1.5 block">Senha</label>
+                <input
+                  type="password"
+                  required
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  placeholder="••••••••"
+                  className="iveco-input"
+                  autoComplete="current-password"
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={status.loading}
+                  className="iveco-btn-primary w-full py-3"
+                >
+                  {status.loading ? (
+                    <span className="flex items-center gap-2">
+                      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                      </svg>
+                      Entrando...
+                    </span>
+                  ) : (
+                    'Entrar no painel'
+                  )}
+                </button>
+
+                {status.message && (
+                  <div
+                    className={`mt-3 rounded-lg border px-4 py-3 text-sm ${
+                      status.error
+                        ? 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+                        : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                    }`}
+                  >
+                    {status.message}
+                  </div>
+                )}
+              </div>
+            </form>
+          </div>
+
+          <p className="mt-6 text-center text-xs text-[#333340]">
+            © {new Date().getFullYear()} IVECO Hub CSDT
+          </p>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
