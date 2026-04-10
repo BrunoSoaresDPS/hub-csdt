@@ -133,7 +133,7 @@ export default function HomePage() {
                     {
                       icon: '⚙️',
                       name: 'Automação de Processos',
-                      desc: 'Rotinas administrativas automatizadas',
+                      desc: 'Eliminar tarefas repetitivas e manuais',
                       examples: 'Automatização de tarefas como aprovação de documentos, fluxo de pagamentos, controle de contratos e gestão de solicitações internas, reduzindo retrabalho e aumentando a agilidade.',
                     },
                     {
