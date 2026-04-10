@@ -14,15 +14,15 @@ interface ImpactSelectorProps {
 }
 
 const financialOptions = [
-  { value: 'LOW', label: 'Baixo', description: 'Impacto financeiro limitado' },
-  { value: 'MEDIUM', label: 'Médio', description: 'Impacto financeiro moderado' },
-  { value: 'HIGH', label: 'Alto', description: 'Impacto financeiro significativo' },
+  { value: 'LOW', label: 'Baixo', description: 'O projeto resolve uma necessidade pontual, sem grande impacto no faturamento ou nos custos da empresa.' },
+  { value: 'MEDIUM', label: 'Médio', description: 'O projeto traz uma melhoria relevante, com economia de custo ou aumento de receita perceptível.' },
+  { value: 'HIGH', label: 'Alto', description: 'O projeto tem potencial de transformar resultados: grande redução de custos, nova receita ou ganho estratégico significativo.' },
 ];
 
 const timeOptions = [
-  { value: 'SHORT', label: 'Curto', description: '< 3 meses' },
-  { value: 'MEDIUM', label: 'Médio', description: '3-6 meses' },
-  { value: 'LONG', label: 'Longo', description: '> 6 meses' },
+  { value: 'SHORT', label: 'Curto', description: 'Menos de 3 meses. Projetos menores e bem definidos, com entrega rápida.' },
+  { value: 'MEDIUM', label: 'Médio', description: 'Entre 3 e 6 meses. Projetos de porte médio que precisam de mais planejamento.' },
+  { value: 'LONG', label: 'Longo', description: 'Mais de 6 meses. Projetos complexos ou de grande escala, com várias etapas.' },
 ];
 
 export default function ImpactSelector({
@@ -64,17 +64,17 @@ export default function ImpactSelector({
       nextDisabled={!currentValue}
       isLast={isFinalStep}
     >
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3">
         {options.map((option) => (
           <button
             key={option.value}
             type="button"
             data-selected={currentValue === option.value}
             onClick={() => onChange(option.value)}
-            className={`rounded-lg border-2 p-4 text-center transition-all ${buttonColorMap[option.value]}`}
+            className={`rounded-lg border-2 p-4 text-left transition-all ${buttonColorMap[option.value]}`}
           >
             <p className="font-semibold text-base mb-1">{option.label}</p>
-            <p className="text-xs text-current/80">{option.description}</p>
+            <p className="text-xs text-current/80 leading-relaxed">{option.description}</p>
           </button>
         ))}
       </div>

@@ -23,7 +23,7 @@ export interface CategoryConfig {
 export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   Chatbot: {
     icon: '💬',
-    description: 'Assistentes virtuais inteligentes para interação com usuários',
+    description: 'Um robô de conversa que responde perguntas e atende usuários automaticamente. Ex: assistente no site, WhatsApp ou app interno da empresa.',
     complexityWeight: 2,
     dynamicQuestions: [
       {
@@ -56,7 +56,7 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   'Ferramentas de IA': {
     icon: '🤖',
-    description: 'Soluções baseadas em IA e Machine Learning para automação',
+    description: 'Sistemas que aprendem com dados para resolver problemas complexos. Ex: prever falhas em máquinas, detectar erros em produtos ou analisar grandes volumes de informação.',
     complexityWeight: 3,
     dynamicQuestions: [
       {
@@ -89,7 +89,7 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   Dashboards: {
     icon: '📊',
-    description: 'Painéis de visualização de dados em tempo real',
+    description: 'Telas com gráficos e indicadores que mostram o desempenho do negócio em tempo real. Ex: painel de vendas, metas do mês ou acompanhamento de produção.',
     complexityWeight: 2,
     dynamicQuestions: [
       {
@@ -114,7 +114,7 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   Automação: {
     icon: '⚙️',
-    description: 'Processos automatizados para reduzir trabalho manual',
+    description: 'Substituir tarefas repetitivas feitas manualmente por processos automáticos. Ex: gerar relatórios, mover dados entre sistemas ou enviar notificações sem intervenção humana.',
     complexityWeight: 2,
     dynamicQuestions: [
       {
@@ -139,7 +139,7 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   'Plataforma e Programas': {
     icon: '🖥️',
-    description: 'Plataformas web, mobile ou software customizado',
+    description: 'Criação de sistemas, aplicativos ou sites personalizados para a empresa. Ex: portal do cliente, ferramenta de gestão interna ou aplicativo para a equipe de campo.',
     complexityWeight: 3,
     dynamicQuestions: [
       {
