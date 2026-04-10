@@ -9,6 +9,8 @@ export interface DynamicQuestion {
   type: 'text' | 'select' | 'checkbox';
   options?: string[];
   placeholder?: string;
+  conditional?: string;
+  conditionalValue?: string;
 }
 
 export interface CategoryConfig {
@@ -27,14 +29,22 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
       {
         key: 'chatbot_languages',
         text: 'Qual(is) idioma(s) o chatbot precisará suportar?',
-        type: 'text',
-        placeholder: 'Ex: Português, Inglês, Espanhol',
+        type: 'select',
+        options: ['Português', 'Inglês', 'Espanhol', 'Francês', 'Alemão', 'Múltiplos idiomas'],
       },
       {
         key: 'chatbot_integrations',
-        text: 'Necessita integração com sistemas existentes?',
+        text: 'Necessita integração com sistemas ou bases de dados?',
         type: 'select',
         options: ['Sim', 'Não', 'Talvez'],
+      },
+      {
+        key: 'chatbot_integrations_details',
+        text: 'Qual sistema ou base de dados precisa integrar?',
+        type: 'text',
+        placeholder: 'Ex: CRM, banco de dados interno, API específica',
+        conditional: 'chatbot_integrations',
+        conditionalValue: 'Sim',
       },
       {
         key: 'chatbot_volume',
@@ -51,9 +61,17 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
     dynamicQuestions: [
       {
         key: 'ai_datasource',
-        text: 'Qual é a principal fonte de dados?',
+        text: 'Necessita integração com sistemas ou bases de dados?',
+        type: 'select',
+        options: ['Sim', 'Não', 'Talvez'],
+      },
+      {
+        key: 'ai_datasource_details',
+        text: 'Qual sistema ou base de dados precisa integrar?',
         type: 'text',
-        placeholder: 'Ex: Base de dados, API, arquivos CSV',
+        placeholder: 'Ex: Data warehouse, banco de dados, APIs antigas',
+        conditional: 'ai_datasource',
+        conditionalValue: 'Sim',
       },
       {
         key: 'ai_training',
@@ -113,9 +131,9 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
       },
       {
         key: 'automation_savings',
-        text: 'Qual é a economia esperada (tempo ou custo)?',
+        text: 'Qual é a economia em tempo esperada?',
         type: 'text',
-        placeholder: 'Ex: 40 horas/mês, 50% de redução de custo',
+        placeholder: 'Ex: 40 horas/mês, 20 horas por semana',
       },
     ],
   },
@@ -138,9 +156,17 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
       },
       {
         key: 'plataforma_integracao',
-        text: 'Necessita integrar com sistemas externos?',
+        text: 'Necessita integração com sistemas ou bases de dados?',
         type: 'select',
         options: ['Sim', 'Não', 'Talvez'],
+      },
+      {
+        key: 'plataforma_integracao_details',
+        text: 'Qual sistema ou base de dados precisa integrar?',
+        type: 'text',
+        placeholder: 'Ex: SAP, CRM, banco de dados legado',
+        conditional: 'plataforma_integracao',
+        conditionalValue: 'Sim',
       },
     ],
   },

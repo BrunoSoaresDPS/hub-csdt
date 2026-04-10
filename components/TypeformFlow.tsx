@@ -34,9 +34,16 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [dynamicQuestionIndex, setDynamicQuestionIndex] = useState(0);
+  const [stepHistory, setStepHistory] = useState<StepType[]>(['categories']);
 
-  const dynamicQuestions = getDynamicQuestions(formData.categories);
-  const totalSteps = 7 + dynamicQuestions.length; // categories + financial + time + title + description + owner + review + dynamic questions
+  const dynamicQuestions = getDynamicQuestions(formData.categories).filter(q => {
+    if (q.conditional) {
+      return formData.additionalAnswers[q.conditional] === q.conditionalValue;
+    }
+    return true;
+  });
+
+  const totalSteps = 7 + dynamicQuestions.length;
 
   const getStepNumber = (): number => {
     const stepOrder: StepType[] = ['categories', 'financial', 'time', 'title', 'description', 'owner', ...dynamicQuestions.map((_, i) => `dynamic_${i}` as any), 'review'];
@@ -45,27 +52,32 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
 
   const handleCategoriesNext = () => {
     if (formData.categories.length > 0) {
+      setStepHistory([...stepHistory, 'financial']);
       setCurrentStep('financial');
       setDynamicQuestionIndex(0);
     }
   };
 
   const handleFinancialNext = () => {
+    setStepHistory([...stepHistory, 'time']);
     setCurrentStep('time');
   };
 
   const handleTimeNext = () => {
+    setStepHistory([...stepHistory, 'title']);
     setCurrentStep('title');
   };
 
   const handleTitleNext = () => {
     if (formData.title.trim()) {
+      setStepHistory([...stepHistory, 'description']);
       setCurrentStep('description');
     }
   };
 
   const handleDescriptionNext = () => {
     if (formData.description.trim()) {
+      setStepHistory([...stepHistory, 'owner']);
       setCurrentStep('owner');
     }
   };
@@ -73,9 +85,11 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
   const handleOwnerNext = () => {
     if (formData.owner.trim()) {
       if (dynamicQuestions.length > 0) {
+        setStepHistory([...stepHistory, 'dynamic']);
         setCurrentStep('dynamic');
         setDynamicQuestionIndex(0);
       } else {
+        setStepHistory([...stepHistory, 'review']);
         setCurrentStep('review');
       }
     }
@@ -85,6 +99,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     if (dynamicQuestionIndex < dynamicQuestions.length - 1) {
       setDynamicQuestionIndex(dynamicQuestionIndex + 1);
     } else {
+      setStepHistory([...stepHistory, 'review']);
       setCurrentStep('review');
     }
   };
@@ -95,14 +110,21 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
       return;
     }
 
-    const stepOrder: StepType[] = ['categories', 'financial', 'time', 'title', 'description', 'owner', 'dynamic', 'review'];
-    const currentIndex = stepOrder.indexOf(currentStep);
-    if (currentIndex > 0) {
-      setCurrentStep(stepOrder[currentIndex - 1]);
-      if (stepOrder[currentIndex - 1] === 'dynamic') {
+    if (stepHistory.length > 1) {
+      const newHistory = stepHistory.slice(0, -1);
+      const previousStep = newHistory[newHistory.length - 1];
+      setStepHistory(newHistory);
+      setCurrentStep(previousStep);
+      if (previousStep === 'dynamic') {
         setDynamicQuestionIndex(dynamicQuestions.length - 1);
       }
     }
+  };
+
+  const handleEditStep = (step: StepType) => {
+    setCurrentStep(step);
+    const newHistory = stepHistory.slice(0, stepHistory.indexOf(step) + 1);
+    setStepHistory(newHistory);
   };
 
   const handleSubmit = async () => {
@@ -311,41 +333,101 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
       >
         <div className="space-y-4 mb-6">
           <div className="iveco-card p-4">
-            <p className="iveco-label mb-1">Categorias</p>
-            <p className="text-white font-medium">{formData.categories.join(', ')}</p>
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex-1">
+                <p className="iveco-label mb-1">Categorias</p>
+                <p className="text-white font-medium">{formData.categories.join(', ')}</p>
+              </div>
+              <button
+                onClick={() => handleEditStep('categories')}
+                className="text-xs text-[#7B9FFF] hover:text-white transition-colors"
+              >
+                Editar
+              </button>
+            </div>
           </div>
 
           {formData.impactFinancial && (
             <div className="iveco-card p-4">
-              <p className="iveco-label mb-1">Impacto Financeiro</p>
-              <p className="text-white font-medium">
-                {{ LOW: 'Baixo', MEDIUM: 'Médio', HIGH: 'Alto' }[formData.impactFinancial]}
-              </p>
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <p className="iveco-label mb-1">Impacto Financeiro</p>
+                  <p className="text-white font-medium">
+                    {{ LOW: 'Baixo', MEDIUM: 'Médio', HIGH: 'Alto' }[formData.impactFinancial]}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleEditStep('financial')}
+                  className="text-xs text-[#7B9FFF] hover:text-white transition-colors"
+                >
+                  Editar
+                </button>
+              </div>
             </div>
           )}
 
           {formData.impactTime && (
             <div className="iveco-card p-4">
-              <p className="iveco-label mb-1">Prazo</p>
-              <p className="text-white font-medium">
-                {{ SHORT: 'Curto (< 3 meses)', MEDIUM: 'Médio (3-6 meses)', LONG: 'Longo (> 6 meses)' }[formData.impactTime]}
-              </p>
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <p className="iveco-label mb-1">Prazo</p>
+                  <p className="text-white font-medium">
+                    {{ SHORT: 'Curto (< 3 meses)', MEDIUM: 'Médio (3-6 meses)', LONG: 'Longo (> 6 meses)' }[formData.impactTime]}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleEditStep('time')}
+                  className="text-xs text-[#7B9FFF] hover:text-white transition-colors"
+                >
+                  Editar
+                </button>
+              </div>
             </div>
           )}
 
           <div className="iveco-card p-4">
-            <p className="iveco-label mb-1">Projeto</p>
-            <p className="text-white font-medium">{formData.title}</p>
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex-1">
+                <p className="iveco-label mb-1">Projeto</p>
+                <p className="text-white font-medium">{formData.title}</p>
+              </div>
+              <button
+                onClick={() => handleEditStep('title')}
+                className="text-xs text-[#7B9FFF] hover:text-white transition-colors"
+              >
+                Editar
+              </button>
+            </div>
           </div>
 
           <div className="iveco-card p-4">
-            <p className="iveco-label mb-1">Descrição</p>
-            <p className="text-white text-sm leading-relaxed">{formData.description}</p>
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex-1">
+                <p className="iveco-label mb-1">Descrição</p>
+                <p className="text-white text-sm leading-relaxed">{formData.description}</p>
+              </div>
+              <button
+                onClick={() => handleEditStep('description')}
+                className="text-xs text-[#7B9FFF] hover:text-white transition-colors flex-shrink-0"
+              >
+                Editar
+              </button>
+            </div>
           </div>
 
           <div className="iveco-card p-4">
-            <p className="iveco-label mb-1">Responsável</p>
-            <p className="text-white font-medium">{formData.owner}</p>
+            <div className="flex justify-between items-start gap-4">
+              <div className="flex-1">
+                <p className="iveco-label mb-1">Responsável</p>
+                <p className="text-white font-medium">{formData.owner}</p>
+              </div>
+              <button
+                onClick={() => handleEditStep('owner')}
+                className="text-xs text-[#7B9FFF] hover:text-white transition-colors"
+              >
+                Editar
+              </button>
+            </div>
           </div>
 
           {Object.keys(formData.additionalAnswers).length > 0 && (
@@ -353,8 +435,8 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
               <p className="iveco-label mb-3">Informações Adicionais</p>
               <ul className="space-y-2">
                 {Object.entries(formData.additionalAnswers).map(([key, value]) => (
-                  <li key={key} className="text-sm text-[#9999a8]">
-                    <span className="text-white font-medium">{key}:</span> {value}
+                  <li key={key} className="text-sm text-[#d4d4d8]">
+                    <span className="text-white font-medium capitalize">{key.replace(/_/g, ' ')}:</span> {value}
                   </li>
                 ))}
               </ul>
@@ -388,7 +470,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
           </div>
 
           <h1 className="text-4xl font-black text-white mb-3">Projeto enviado com sucesso!</h1>
-          <p className="text-lg text-[#9999a8] mb-8">
+          <p className="text-lg text-[#d4d4d8] mb-8">
             Obrigado por submeter seu projeto. Nossa equipe analisará todos os detalhes e entrará em contato em breve para os próximos passos.
           </p>
 
@@ -403,6 +485,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
                 additionalAnswers: {},
               });
               setDynamicQuestionIndex(0);
+              setStepHistory(['categories']);
             }}
             className="iveco-btn-primary py-3 px-8"
           >
