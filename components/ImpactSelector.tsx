@@ -35,7 +35,7 @@ export default function ImpactSelector({
   progress,
   step,
 }: ImpactSelectorProps) {
-  const isFinalStep = step === 'time';
+  const isFinalStep = false; // neither impact step is the last step in the form
   const isFinancialStep = step === 'financial';
 
   const currentValue = isFinancialStep ? financialImpact : timeImpact;

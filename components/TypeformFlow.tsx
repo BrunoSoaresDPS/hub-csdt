@@ -13,10 +13,25 @@ interface FormData {
   title: string;
   description: string;
   owner: string;
+  area: string;
   additionalAnswers: Record<string, string>;
 }
 
-type StepType = 'categories' | 'financial' | 'time' | 'title' | 'description' | 'owner' | 'dynamic' | 'review' | 'success';
+type StepType = 'categories' | 'financial' | 'time' | 'title' | 'description' | 'owner' | 'area' | 'dynamic' | 'review' | 'success';
+
+const AREAS = [
+  'Financeiro',
+  'Comercial / Vendas',
+  'Recursos Humanos',
+  'Compras / Suprimentos',
+  'TI / Tecnologia',
+  'Operações / Produção',
+  'Jurídico / Compliance',
+  'Marketing / Comunicação',
+  'Logística',
+  'Gestão / Diretoria',
+  'Outra área',
+];
 
 interface TypeformFlowProps {
   onSuccess?: () => void;
@@ -29,6 +44,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     title: '',
     description: '',
     owner: '',
+    area: '',
     additionalAnswers: {},
   });
   const [loading, setLoading] = useState(false);
@@ -43,11 +59,16 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     return true;
   });
 
-  const totalSteps = 7 + dynamicQuestions.length;
+  // Fixed steps: categories, financial, time, title, description, owner, area, review = 8
+  const totalSteps = 8 + dynamicQuestions.length;
 
   const getStepNumber = (): number => {
-    const stepOrder: StepType[] = ['categories', 'financial', 'time', 'title', 'description', 'owner', ...dynamicQuestions.map((_, i) => `dynamic_${i}` as any), 'review'];
-    return stepOrder.indexOf(currentStep) + 1;
+    const fixedOrder: StepType[] = ['categories', 'financial', 'time', 'title', 'description', 'owner', 'area'];
+    const fixedIndex = fixedOrder.indexOf(currentStep);
+    if (fixedIndex >= 0) return fixedIndex + 1;
+    if (currentStep === 'dynamic') return fixedOrder.length + 1 + dynamicQuestionIndex;
+    if (currentStep === 'review') return fixedOrder.length + 1 + dynamicQuestions.length;
+    return 1;
   };
 
   const handleCategoriesNext = () => {
@@ -84,6 +105,13 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
 
   const handleOwnerNext = () => {
     if (formData.owner.trim()) {
+      setStepHistory([...stepHistory, 'area']);
+      setCurrentStep('area');
+    }
+  };
+
+  const handleAreaNext = () => {
+    if (formData.area) {
       if (dynamicQuestions.length > 0) {
         setStepHistory([...stepHistory, 'dynamic']);
         setCurrentStep('dynamic');
@@ -132,10 +160,18 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     setError('');
 
     try {
+      const payload = {
+        ...formData,
+        additionalAnswers: {
+          area: formData.area,
+          ...formData.additionalAnswers,
+        },
+      };
+
       const response = await fetch('/api/projects/public', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -260,6 +296,36 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
           className="iveco-input text-lg py-3"
           autoFocus
         />
+      </FormStep>
+    );
+  }
+
+  if (currentStep === 'area') {
+    return (
+      <FormStep
+        title="Qual é a área interessada no projeto?"
+        description="Selecione a área ou departamento que está solicitando ou será beneficiado por este projeto."
+        progress={progress}
+        onNext={handleAreaNext}
+        onBack={handleBack}
+        nextDisabled={!formData.area}
+      >
+        <div className="grid gap-2">
+          {AREAS.map((area) => (
+            <button
+              key={area}
+              type="button"
+              onClick={() => setFormData({ ...formData, area })}
+              className={`py-3 px-4 rounded-lg border text-left font-medium transition-all ${
+                formData.area === area
+                  ? 'border-[#1654FF] bg-[#1654FF]/10 text-white'
+                  : 'border-[#232329] bg-[#17171b] text-[#9999a8] hover:border-[#3a3a46]'
+              }`}
+            >
+              {area}
+            </button>
+          ))}
+        </div>
       </FormStep>
     );
   }
@@ -431,6 +497,23 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
             </div>
           </div>
 
+          {formData.area && (
+            <div className="iveco-card p-4">
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <p className="iveco-label mb-1">Área Interessada</p>
+                  <p className="text-white font-medium">{formData.area}</p>
+                </div>
+                <button
+                  onClick={() => handleEditStep('area')}
+                  className="text-xs text-[#7B9FFF] hover:text-white transition-colors"
+                >
+                  Editar
+                </button>
+              </div>
+            </div>
+          )}
+
           {Object.keys(formData.additionalAnswers).length > 0 && (
             <div className="iveco-card p-4">
               <p className="iveco-label mb-3">Informações Adicionais</p>
@@ -483,6 +566,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
                 title: '',
                 description: '',
                 owner: '',
+                area: '',
                 additionalAnswers: {},
               });
               setDynamicQuestionIndex(0);
