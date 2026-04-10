@@ -23,8 +23,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const token = signToken({ sub: user.id, email: user.email });
-  const cookieParts = [`hub_token=${token}`, 'HttpOnly', 'Path=/', 'Max-Age=28800', 'SameSite=Lax'];
-  if (process.env.NODE_ENV === 'production') cookieParts.push('Secure');
+  const isProduction = process.env.NODE_ENV === 'production';
+  const cookieParts = [`hub_token=${token}`, 'HttpOnly', 'Path=/', 'Max-Age=28800'];
+  if (isProduction) {
+    cookieParts.push('Secure', 'SameSite=None');
+  } else {
+    cookieParts.push('SameSite=Lax');
+  }
   res.setHeader('Set-Cookie', cookieParts.join('; '));
   return res.status(200).json({ message: 'Login realizado com sucesso.' });
 }

@@ -41,6 +41,9 @@ export default function ProjectDetail({ id }: { id: string }) {
   const [message, setMessage] = useState({ text: '', success: false });
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [comment, setComment] = useState('');
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [commentMessage, setCommentMessage] = useState({ text: '', success: false });
   const router = useRouter();
 
   useEffect(() => {
@@ -73,6 +76,31 @@ export default function ProjectDetail({ id }: { id: string }) {
     setMessage({ text: 'Projeto atualizado com sucesso.', success: true });
     setForm((prev) => ({ ...prev, changeLog: '' }));
     router.refresh();
+  };
+
+  const handleAddComment = async () => {
+    if (!comment.trim()) return;
+    setCommentLoading(true);
+    setCommentMessage({ text: '', success: false });
+    const res = await fetch(`/api/projects/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ changeLog: comment }),
+    });
+    setCommentLoading(false);
+    if (!res.ok) {
+      setCommentMessage({ text: 'Erro ao adicionar comentário.', success: false });
+      return;
+    }
+    setCommentMessage({ text: 'Comentário adicionado.', success: true });
+    setComment('');
+    router.refresh();
+    // Reload project to show new log
+    const updated = await fetch(`/api/projects/${id}`);
+    if (updated.ok) {
+      const data = await updated.json();
+      setProject(data.project);
+    }
   };
 
   const handleDelete = async () => {
@@ -277,25 +305,60 @@ export default function ProjectDetail({ id }: { id: string }) {
           </div>
         </form>
 
-        {/* Change log */}
-        <div className="iveco-card p-5">
-          <div className="mb-4 border-b border-[#232329] pb-4">
-            <h3 className="text-base font-bold text-white">Histórico</h3>
-            <p className="mt-0.5 text-xs text-[#555562]">{project.changeLogs.length} registro{project.changeLogs.length !== 1 ? 's' : ''}</p>
-          </div>
-          <div className="space-y-3 overflow-y-auto max-h-80">
-            {project.changeLogs.length === 0 ? (
-              <p className="text-sm text-[#555562]">Sem registros.</p>
-            ) : (
-              project.changeLogs.map((log) => (
-                <div key={log.id} className="rounded-lg border border-[#232329] bg-[#17171b] p-3">
-                  <p className="text-xs text-[#9999a8] leading-relaxed">{log.message}</p>
-                  <p className="mt-2 text-[10px] text-[#333340]">
-                    {new Date(log.createdAt).toLocaleString('pt-BR')}
-                  </p>
-                </div>
-              ))
+        {/* Comments + Change log */}
+        <div className="space-y-4">
+          {/* Add comment */}
+          <div className="iveco-card p-5">
+            <div className="mb-4 border-b border-[#232329] pb-4">
+              <h3 className="text-base font-bold text-white">Adicionar comentário</h3>
+              <p className="mt-0.5 text-xs text-[#555562]">Registre observações sem alterar o status do projeto.</p>
+            </div>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="iveco-input resize-none w-full mb-3"
+              placeholder="Digite seu comentário..."
+              rows={3}
+            />
+            {commentMessage.text && (
+              <div className={`mb-3 rounded-lg border px-3 py-2 text-sm ${
+                commentMessage.success
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                  : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+              }`}>
+                {commentMessage.text}
+              </div>
             )}
+            <button
+              type="button"
+              onClick={handleAddComment}
+              disabled={commentLoading || !comment.trim()}
+              className="iveco-btn-primary w-full py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {commentLoading ? 'Enviando...' : 'Comentar'}
+            </button>
+          </div>
+
+          {/* Change log */}
+          <div className="iveco-card p-5">
+            <div className="mb-4 border-b border-[#232329] pb-4">
+              <h3 className="text-base font-bold text-white">Histórico</h3>
+              <p className="mt-0.5 text-xs text-[#555562]">{project.changeLogs.length} registro{project.changeLogs.length !== 1 ? 's' : ''}</p>
+            </div>
+            <div className="space-y-3 overflow-y-auto max-h-80">
+              {project.changeLogs.length === 0 ? (
+                <p className="text-sm text-[#555562]">Sem registros.</p>
+              ) : (
+                project.changeLogs.map((log) => (
+                  <div key={log.id} className="rounded-lg border border-[#232329] bg-[#17171b] p-3">
+                    <p className="text-xs text-[#9999a8] leading-relaxed">{log.message}</p>
+                    <p className="mt-2 text-[10px] text-[#333340]">
+                      {new Date(log.createdAt).toLocaleString('pt-BR')}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

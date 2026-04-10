@@ -271,6 +271,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     return (
       <FormStep
         title={question.text}
+        description={question.description}
         progress={progress}
         onNext={handleDynamicQuestionNext}
         onBack={handleBack}
