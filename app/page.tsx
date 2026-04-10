@@ -68,12 +68,12 @@ export default function HomePage() {
               {/* Left: Hero Content */}
               <div className="space-y-8 animate-fade-in">
                 <div className="space-y-4">
-                  <p className="iveco-label text-[#1654FF]">Portal de Projetos</p>
+                  <p className="iveco-label text-[#1654FF]">Hub de Inovação Corporativa</p>
                   <h1 className="text-4xl font-black leading-[1.2] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                    Transforme suas ideias em <span className="text-[#1654FF]">projetos reais</span>
+                    Centralize suas demandas de <span className="text-[#1654FF]">tecnologia e inovação</span>
                   </h1>
                   <p className="text-lg text-[#e8e8ec] leading-relaxed max-w-lg">
-                    Submeta seus projetos de forma simples e inteligente. Nossa equipe IVECO analisará, avaliará e transformará suas demandas em soluções concretas.
+                    Submeta projetos de automação, inteligência artificial, dashboards e plataformas digitais. Nossa equipe CSDT avalia, prioriza e transforma suas demandas em soluções corporativas de alto impacto.
                   </p>
                 </div>
 
@@ -91,9 +91,9 @@ export default function HomePage() {
                 {/* Features */}
                 <div className="grid gap-4 sm:grid-cols-3 pt-4">
                   {[
-                    { icon: '⚡', label: 'Rápido', desc: '< 5 minutos' },
-                    { icon: '🔒', label: 'Seguro', desc: 'Dados protegidos' },
-                    { icon: '📊', label: 'Inteligente', desc: 'Auto-avaliação' },
+                    { icon: '🎯', label: 'Estratégico', desc: 'Alinhado às metas do negócio' },
+                    { icon: '⚡', label: 'Ágil', desc: 'Avaliação e priorização rápidas' },
+                    { icon: '🔗', label: 'Integrado', desc: 'Conecta áreas e sistemas' },
                   ].map((feature) => (
                     <div key={feature.label} className="flex flex-col gap-2">
                       <span className="text-2xl">{feature.icon}</span>
