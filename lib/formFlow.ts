@@ -24,7 +24,7 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   Chatbot: {
     icon: '💬',
     description: 'Um robô de conversa que responde perguntas e atende usuários automaticamente. Ex: assistente no site, WhatsApp ou app interno da empresa.',
-    complexityWeight: 2,
+    complexityWeight: 1,
     dynamicQuestions: [
       {
         key: 'chatbot_languages',
@@ -90,7 +90,7 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   Dashboards: {
     icon: '📊',
     description: 'Telas com gráficos e indicadores que mostram o desempenho do negócio em tempo real. Ex: painel de vendas, metas do mês ou acompanhamento de produção.',
-    complexityWeight: 2,
+    complexityWeight: 1,
     dynamicQuestions: [
       {
         key: 'dashboard_datasize',
