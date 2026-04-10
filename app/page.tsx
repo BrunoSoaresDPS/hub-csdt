@@ -105,22 +105,56 @@ export default function HomePage() {
               </div>
 
               {/* Right: Categories Preview */}
-              <div className="iveco-card p-6">
-                <p className="iveco-label mb-4">Categorias de Projetos</p>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-4 animate-fade-in">
+                <div>
+                  <p className="iveco-label mb-4">Categorias de Projetos</p>
+                  <p className="text-sm text-[#c4c4c8] mb-4">Selecione uma ou mais categorias que representam seu projeto:</p>
+                </div>
+                <div className="space-y-3">
                   {[
-                    { icon: '💬', name: 'Chatbot' },
-                    { icon: '🤖', name: 'IA' },
-                    { icon: '📊', name: 'Dashboards' },
-                    { icon: '⚙️', name: 'Automação' },
-                    { icon: '🖥️', name: 'Plataformas' },
+                    {
+                      icon: '💬',
+                      name: 'Chatbot',
+                      desc: 'Assistentes virtuais inteligentes',
+                      examples: 'Suporte ao cliente 24/7, FAQ automático, atendimento multilíngue',
+                    },
+                    {
+                      icon: '🤖',
+                      name: 'Ferramentas de IA',
+                      desc: 'Soluções baseadas em IA e ML',
+                      examples: 'Reconhecimento de imagem, processamento de linguagem, previsão de dados',
+                    },
+                    {
+                      icon: '📊',
+                      name: 'Dashboards',
+                      desc: 'Painéis de visualização de dados',
+                      examples: 'Relatórios em tempo real, KPIs, análises de desempenho',
+                    },
+                    {
+                      icon: '⚙️',
+                      name: 'Automação',
+                      desc: 'Processos automatizados',
+                      examples: 'RPA, fluxos de trabalho, integração de sistemas',
+                    },
+                    {
+                      icon: '🖥️',
+                      name: 'Plataforma',
+                      desc: 'Softwares customizados',
+                      examples: 'App web, aplicativo mobile, sistema enterprise',
+                    },
                   ].map((cat) => (
                     <div
                       key={cat.name}
-                      className="flex items-center gap-2 p-2 rounded-lg bg-[#17171b] border border-[#232329]"
+                      className="iveco-card p-4 hover:border-[#1654FF]/50 transition-all group cursor-pointer"
                     >
-                      <span className="text-lg">{cat.icon}</span>
-                      <span className="text-sm text-[#c4c4c8]">{cat.name}</span>
+                      <div className="flex gap-3">
+                        <span className="text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">{cat.icon}</span>
+                        <div className="flex-1">
+                          <p className="font-bold text-white">{cat.name}</p>
+                          <p className="text-xs text-[#a0a0a8] mt-1">{cat.desc}</p>
+                          <p className="text-xs text-[#7B9FFF] mt-2">Ex: {cat.examples}</p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
