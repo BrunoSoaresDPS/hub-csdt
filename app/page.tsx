@@ -104,46 +104,25 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right: Stats & Info Cards */}
-              <div className="space-y-6 animate-fade-in">
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4">
+              {/* Right: Categories Preview */}
+              <div className="iveco-card p-6">
+                <p className="iveco-label mb-4">Categorias de Projetos</p>
+                <div className="grid grid-cols-2 gap-2">
                   {[
-                    { number: '500+', label: 'Projetos submetidos' },
-                    { number: '95%', label: 'Taxa de aprovação' },
-                    { number: '24h', label: 'Resposta média' },
-                    { number: '100%', label: 'Gratuito' },
-                  ].map((stat) => (
+                    { icon: '💬', name: 'Chatbot' },
+                    { icon: '🤖', name: 'IA' },
+                    { icon: '📊', name: 'Dashboards' },
+                    { icon: '⚙️', name: 'Automação' },
+                    { icon: '🖥️', name: 'Plataformas' },
+                  ].map((cat) => (
                     <div
-                      key={stat.label}
-                      className="iveco-card p-6 flex flex-col gap-2 hover:border-[#1654FF]/50 transition-colors"
+                      key={cat.name}
+                      className="flex items-center gap-2 p-2 rounded-lg bg-[#17171b] border border-[#232329]"
                     >
-                      <p className="text-3xl font-black text-[#1654FF]">{stat.number}</p>
-                      <p className="text-sm text-[#c4c4c8]">{stat.label}</p>
+                      <span className="text-lg">{cat.icon}</span>
+                      <span className="text-sm text-[#c4c4c8]">{cat.name}</span>
                     </div>
                   ))}
-                </div>
-
-                {/* Categories Preview */}
-                <div className="iveco-card p-6">
-                  <p className="iveco-label mb-4">Categorias de Projetos</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { icon: '💬', name: 'Chatbot' },
-                      { icon: '🤖', name: 'IA' },
-                      { icon: '📊', name: 'Dashboards' },
-                      { icon: '⚙️', name: 'Automação' },
-                      { icon: '🖥️', name: 'Plataformas' },
-                    ].map((cat) => (
-                      <div
-                        key={cat.name}
-                        className="flex items-center gap-2 p-2 rounded-lg bg-[#17171b] border border-[#232329]"
-                      >
-                        <span className="text-lg">{cat.icon}</span>
-                        <span className="text-sm text-[#c4c4c8]">{cat.name}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
