@@ -114,33 +114,33 @@ export default function HomePage() {
                   {[
                     {
                       icon: '💬',
-                      name: 'Chatbot',
-                      desc: 'Um assistente que responde automaticamente',
-                      examples: 'Um robô que conversa com seus clientes 24 horas por dia, respondendo perguntas frequentes e ajudando sem precisar de uma pessoa do outro lado.',
+                      name: 'Chatbot Corporativo',
+                      desc: 'Atendimento interno ágil e inteligente',
+                      examples: 'Um assistente digital que apoia colaboradores com dúvidas sobre processos, políticas, sistemas e solicitações internas, reduzindo demandas operacionais e aumentando a eficiência do time administrativo.',
                     },
                     {
                       icon: '🤖',
                       name: 'Ferramentas de IA',
-                      desc: 'Máquinas inteligentes que aprendem',
-                      examples: 'Um programa que consegue reconhecer rostos em fotos, entender o que você escreve ou prever qual produto um cliente vai querer comprar.',
+                      desc: 'Inteligência para decisões estratégicas',
+                      examples: 'Soluções que analisam dados financeiros, comerciais e operacionais, auxiliando na previsão de cenários, identificação de oportunidades e melhoria contínua dos processos administrativos.',
                     },
                     {
                       icon: '📊',
-                      name: 'Dashboards',
-                      desc: 'Painel com suas informações em um olhar',
-                      examples: 'Um gráfico bonito que mostra vendas, lucros, clientes novos e outras métricas importantes de forma visual e em tempo real.',
+                      name: 'Dashboards Gerenciais',
+                      desc: 'Visão estratégica em tempo real',
+                      examples: 'Painéis que consolidam indicadores como faturamento, despesas, desempenho comercial e produtividade, permitindo acompanhamento rápido e decisões mais assertivas.',
                     },
                     {
                       icon: '⚙️',
-                      name: 'Automação',
-                      desc: 'Tarefas que se fazem sozinhas',
-                      examples: 'Um processo que funciona automaticamente: por exemplo, quando alguém compra, o sistema já envia o e-mail de confirmação e avisa o estoque sem ninguém fazer nada.',
+                      name: 'Automação de Processos',
+                      desc: 'Rotinas administrativas automatizadas',
+                      examples: 'Automatização de tarefas como aprovação de documentos, fluxo de pagamentos, controle de contratos e gestão de solicitações internas, reduzindo retrabalho e aumentando a agilidade.',
                     },
                     {
-                      icon: '🖥️',
-                      name: 'Plataforma',
-                      desc: 'Um software feito especialmente para você',
-                      examples: 'Um site, um aplicativo de celular ou um sistema que resolve um problema específico do seu negócio do seu jeito, com suas cores e do seu jeito de funcionar.',
+                      icon: '💻',
+                      name: 'Plataforma Corporativa',
+                      desc: 'Gestão integrada e personalizada',
+                      examples: 'Sistemas desenvolvidos para centralizar informações e integrar áreas como financeiro, RH, compras e comercial, garantindo maior controle, organização e eficiência operacional.',
                     },
                   ].map((cat) => (
                     <div
@@ -160,70 +160,6 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* Benefits Section */}
-        <section className="px-6 py-16 bg-[#17171b]/50 border-t border-[#232329]">
-          <div className="mx-auto max-w-7xl">
-            <div className="text-center mb-12">
-              <p className="iveco-label text-[#1654FF] mb-2">Como Funciona</p>
-              <h2 className="text-3xl font-black text-white">Processo Simples e Intuitivo</h2>
-            </div>
-
-            <div className="grid gap-8 sm:grid-cols-3">
-              {[
-                {
-                  step: '1',
-                  title: 'Submeta',
-                  description: 'Preencha o formulário inteligente com as informações do seu projeto',
-                  icon: '📝',
-                },
-                {
-                  step: '2',
-                  title: 'Analisamos',
-                  description: 'Nossa equipe avalia complexidade, viabilidade e prioridades',
-                  icon: '🔍',
-                },
-                {
-                  step: '3',
-                  title: 'Executamos',
-                  description: 'Transformamos em soluções reais dentro do prazo acordado',
-                  icon: '✅',
-                },
-              ].map((item) => (
-                <div key={item.step} className="iveco-card p-6 relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-[#1654FF] group-hover:h-1 group-hover:w-full group-hover:top-0 transition-all duration-500 opacity-0 group-hover:opacity-100" />
-                  <div className="relative z-10">
-                    <div className="text-4xl mb-3">{item.icon}</div>
-                    <p className="text-xs font-bold text-[#1654FF] mb-2">PASSO {item.step}</p>
-                    <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                    <p className="text-sm text-[#e8e8ec] leading-relaxed">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="px-6 py-16 sm:py-24">
-          <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
-              Pronto para começar?
-            </h2>
-            <p className="text-lg text-[#e8e8ec] mb-8">
-              Submeta seu projeto agora e veja como podemos transformar suas ideias em realidade.
-            </p>
-            <button
-              onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#1654FF] text-white font-bold rounded-lg hover:bg-[#0D3FCC] transition-all shadow-lg hover:shadow-[#1654FF]/40 hover:shadow-2xl group"
-            >
-              <span>Enviar Projeto</span>
-              <svg className="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </button>
           </div>
         </section>
 

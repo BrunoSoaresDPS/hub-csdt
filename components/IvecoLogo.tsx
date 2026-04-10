@@ -7,8 +7,8 @@ interface IvecoLogoProps {
 
 const sizeMap = {
   sm: { width: 80, height: 28 },
-  md: { width: 110, height: 38 },
-  lg: { width: 160, height: 56 },
+  md: { width: 150, height: 52 },
+  lg: { width: 200, height: 70 },
 };
 
 export default function IvecoLogo({ size = 'md', showTagline = false }: IvecoLogoProps) {
@@ -24,7 +24,7 @@ export default function IvecoLogo({ size = 'md', showTagline = false }: IvecoLog
         className="object-contain"
       />
       {showTagline && (
-        <span className="font-medium tracking-[0.25em] text-[#555562] uppercase text-xs">
+        <span className="font-bold tracking-[0.25em] text-[#9999b8] uppercase text-sm">
           Hub CSDT
         </span>
       )}
