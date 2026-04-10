@@ -144,31 +144,6 @@ export const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
       },
     ],
   },
-  'Solução Completa': {
-    icon: '🚀',
-    description: 'Projeto completo abrangendo múltiplas competências',
-    complexityWeight: 3,
-    dynamicQuestions: [
-      {
-        key: 'solucao_escopo',
-        text: 'Qual é o escopo principal do projeto?',
-        type: 'text',
-        placeholder: 'Descreva os componentes principais',
-      },
-      {
-        key: 'solucao_timing',
-        text: 'Qual é a data de go-live esperada?',
-        type: 'text',
-        placeholder: 'Ex: Dezembro 2024, Q1 2025',
-      },
-      {
-        key: 'solucao_stakeholders',
-        text: 'Quantas áreas/stakeholders estão envolvidas?',
-        type: 'text',
-        placeholder: 'Ex: TI, RH, Financeiro, etc.',
-      },
-    ],
-  },
 };
 
 /**
