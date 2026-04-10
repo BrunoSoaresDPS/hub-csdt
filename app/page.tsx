@@ -72,7 +72,7 @@ export default function HomePage() {
                   <h1 className="text-4xl font-black leading-[1.2] tracking-tight text-white sm:text-5xl lg:text-6xl">
                     Transforme suas ideias em <span className="text-[#1654FF]">projetos reais</span>
                   </h1>
-                  <p className="text-lg text-[#9999a8] leading-relaxed max-w-lg">
+                  <p className="text-lg text-[#d4d4d8] leading-relaxed max-w-lg">
                     Submeta seus projetos de forma simples e inteligente. Nossa equipe IVECO analisará, avaliará e transformará suas demandas em soluções concretas.
                   </p>
                 </div>
@@ -98,7 +98,7 @@ export default function HomePage() {
                     <div key={feature.label} className="flex flex-col gap-2">
                       <span className="text-2xl">{feature.icon}</span>
                       <p className="font-semibold text-white">{feature.label}</p>
-                      <p className="text-sm text-[#555562]">{feature.desc}</p>
+                      <p className="text-sm text-[#c4c4c8]">{feature.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -119,7 +119,7 @@ export default function HomePage() {
                       className="iveco-card p-6 flex flex-col gap-2 hover:border-[#1654FF]/50 transition-colors"
                     >
                       <p className="text-3xl font-black text-[#1654FF]">{stat.number}</p>
-                      <p className="text-sm text-[#9999a8]">{stat.label}</p>
+                      <p className="text-sm text-[#c4c4c8]">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -140,7 +140,7 @@ export default function HomePage() {
                         className="flex items-center gap-2 p-2 rounded-lg bg-[#17171b] border border-[#232329]"
                       >
                         <span className="text-lg">{cat.icon}</span>
-                        <span className="text-sm text-[#9999a8]">{cat.name}</span>
+                        <span className="text-sm text-[#c4c4c8]">{cat.name}</span>
                       </div>
                     ))}
                   </div>
@@ -185,7 +185,7 @@ export default function HomePage() {
                     <div className="text-4xl mb-3">{item.icon}</div>
                     <p className="text-xs font-bold text-[#1654FF] mb-2">PASSO {item.step}</p>
                     <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                    <p className="text-sm text-[#9999a8] leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-[#d4d4d8] leading-relaxed">{item.description}</p>
                   </div>
                 </div>
               ))}
@@ -199,7 +199,7 @@ export default function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
               Pronto para começar?
             </h2>
-            <p className="text-lg text-[#9999a8] mb-8">
+            <p className="text-lg text-[#d4d4d8] mb-8">
               Submeta seu projeto agora e veja como podemos transformar suas ideias em realidade.
             </p>
             <button
@@ -217,7 +217,7 @@ export default function HomePage() {
         {/* Footer */}
         <footer className="border-t border-[#232329] bg-[#080808] px-6 py-8">
           <div className="mx-auto max-w-7xl text-center">
-            <p className="text-sm text-[#555562]">
+            <p className="text-sm text-[#a0a0a8]">
               © {new Date().getFullYear()} IVECO Hub CSDT. Todos os direitos reservados.
             </p>
           </div>
