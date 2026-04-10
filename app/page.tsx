@@ -115,32 +115,32 @@ export default function HomePage() {
                     {
                       icon: '💬',
                       name: 'Chatbot',
-                      desc: 'Assistentes virtuais inteligentes',
-                      examples: 'Suporte ao cliente 24/7, FAQ automático, atendimento multilíngue',
+                      desc: 'Um assistente que responde automaticamente',
+                      examples: 'Um robô que conversa com seus clientes 24 horas por dia, respondendo perguntas frequentes e ajudando sem precisar de uma pessoa do outro lado.',
                     },
                     {
                       icon: '🤖',
                       name: 'Ferramentas de IA',
-                      desc: 'Soluções baseadas em IA e ML',
-                      examples: 'Reconhecimento de imagem, processamento de linguagem, previsão de dados',
+                      desc: 'Máquinas inteligentes que aprendem',
+                      examples: 'Um programa que consegue reconhecer rostos em fotos, entender o que você escreve ou prever qual produto um cliente vai querer comprar.',
                     },
                     {
                       icon: '📊',
                       name: 'Dashboards',
-                      desc: 'Painéis de visualização de dados',
-                      examples: 'Relatórios em tempo real, KPIs, análises de desempenho',
+                      desc: 'Painel com suas informações em um olhar',
+                      examples: 'Um gráfico bonito que mostra vendas, lucros, clientes novos e outras métricas importantes de forma visual e em tempo real.',
                     },
                     {
                       icon: '⚙️',
                       name: 'Automação',
-                      desc: 'Processos automatizados',
-                      examples: 'RPA, fluxos de trabalho, integração de sistemas',
+                      desc: 'Tarefas que se fazem sozinhas',
+                      examples: 'Um processo que funciona automaticamente: por exemplo, quando alguém compra, o sistema já envia o e-mail de confirmação e avisa o estoque sem ninguém fazer nada.',
                     },
                     {
                       icon: '🖥️',
                       name: 'Plataforma',
-                      desc: 'Softwares customizados',
-                      examples: 'App web, aplicativo mobile, sistema enterprise',
+                      desc: 'Um software feito especialmente para você',
+                      examples: 'Um site, um aplicativo de celular ou um sistema que resolve um problema específico do seu negócio do seu jeito, com suas cores e do seu jeito de funcionar.',
                     },
                   ].map((cat) => (
                     <div
@@ -151,8 +151,8 @@ export default function HomePage() {
                         <span className="text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">{cat.icon}</span>
                         <div className="flex-1">
                           <p className="font-bold text-white">{cat.name}</p>
-                          <p className="text-xs text-[#a0a0a8] mt-1">{cat.desc}</p>
-                          <p className="text-xs text-[#7B9FFF] mt-2">Ex: {cat.examples}</p>
+                          <p className="text-sm text-[#d4d4d8] mt-1">{cat.desc}</p>
+                          <p className="text-xs text-[#a0a0a8] mt-2 leading-relaxed">{cat.examples}</p>
                         </div>
                       </div>
                     </div>
