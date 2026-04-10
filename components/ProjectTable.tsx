@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import StatusPill from './StatusPill';
-import { priorityLabels } from '../lib/validators';
+import { priorityLabels, complexityLabels } from '../lib/validators';
 
 interface Project {
   id: string;
@@ -10,6 +10,7 @@ interface Project {
   owner: string;
   status: string;
   priority: string;
+  complexity: string;
   category: string;
   startDate: string;
   endDate: string;
@@ -20,6 +21,12 @@ const priorityDot: Record<string, string> = {
   HIGH: 'bg-rose-400',
   MEDIUM: 'bg-amber-400',
   LOW: 'bg-slate-500',
+};
+
+const complexityBadge: Record<string, string> = {
+  HIGH: 'border-rose-500/30 bg-rose-500/10 text-rose-300',
+  MEDIUM: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  LOW: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
 };
 
 export default function ProjectTable({ projects }: { projects: Project[] }) {
@@ -46,6 +53,7 @@ export default function ProjectTable({ projects }: { projects: Project[] }) {
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Responsável</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Status</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Prioridade</th>
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Complexidade</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]"></th>
             </tr>
           </thead>
@@ -78,8 +86,10 @@ export default function ProjectTable({ projects }: { projects: Project[] }) {
                     </span>
                   </div>
                 </td>
-                <td className="px-5 py-4 text-[#9999a8]">
-                  {new Date(project.endDate).toLocaleDateString('pt-BR')}
+                <td className="px-5 py-4">
+                  <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-medium ${complexityBadge[project.complexity] ?? complexityBadge.MEDIUM}`}>
+                    {complexityLabels[project.complexity as keyof typeof complexityLabels] ?? project.complexity}
+                  </span>
                 </td>
                 <td className="px-5 py-4 text-right">
                   <Link

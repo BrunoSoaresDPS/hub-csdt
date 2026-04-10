@@ -1,25 +1,30 @@
+import Image from 'next/image';
+
 interface IvecoLogoProps {
   size?: 'sm' | 'md' | 'lg';
   showTagline?: boolean;
 }
 
 const sizeMap = {
-  sm: { text: 'text-xl', tag: 'text-[10px]' },
-  md: { text: 'text-2xl', tag: 'text-xs' },
-  lg: { text: 'text-4xl', tag: 'text-sm' },
+  sm: { width: 80, height: 28 },
+  md: { width: 110, height: 38 },
+  lg: { width: 160, height: 56 },
 };
 
 export default function IvecoLogo({ size = 'md', showTagline = false }: IvecoLogoProps) {
-  const { text, tag } = sizeMap[size];
+  const { width, height } = sizeMap[size];
   return (
-    <div className="flex flex-col gap-0.5">
-      <span className={`font-black tracking-[0.18em] text-white select-none ${text}`}>
-        IV
-        <span className="inline-block bg-[#1654FF] px-[3px] leading-none text-white">E</span>
-        CO
-      </span>
+    <div className="flex flex-col gap-1">
+      <Image
+        src="/logo-iveco.png"
+        alt="IVECO"
+        width={width}
+        height={height}
+        priority
+        className="object-contain"
+      />
       {showTagline && (
-        <span className={`font-medium tracking-[0.25em] text-[#555562] uppercase ${tag}`}>
+        <span className="font-medium tracking-[0.25em] text-[#555562] uppercase text-xs">
           Hub CSDT
         </span>
       )}

@@ -11,6 +11,12 @@ export const priorityLabels = {
   HIGH: 'Alta',
 } as const;
 
+export const complexityLabels = {
+  LOW: 'Baixa',
+  MEDIUM: 'Média',
+  HIGH: 'Alta',
+} as const;
+
 export function sanitizeInput(value: unknown) {
   if (typeof value !== 'string') return '';
   return value.replace(/[<>"'`]/g, '');

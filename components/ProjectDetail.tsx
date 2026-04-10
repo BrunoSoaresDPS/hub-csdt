@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import StatusPill from './StatusPill';
-import { projectStatuses, priorityLabels } from '../lib/validators';
+import { projectStatuses, priorityLabels, complexityLabels } from '../lib/validators';
 
 interface TaskProject {
   id: string;
@@ -12,6 +12,7 @@ interface TaskProject {
   owner: string;
   status: string;
   priority: string;
+  complexity: string;
   category: string;
   startDate: string;
   endDate: string;
@@ -23,6 +24,12 @@ const priorityDot: Record<string, string> = {
   HIGH: 'bg-rose-400',
   MEDIUM: 'bg-amber-400',
   LOW: 'bg-slate-500',
+};
+
+const complexityBadge: Record<string, string> = {
+  HIGH: 'border-rose-500/30 bg-rose-500/10 text-rose-300',
+  MEDIUM: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  LOW: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
 };
 
 export default function ProjectDetail({ id }: { id: string }) {
@@ -111,6 +118,9 @@ export default function ProjectDetail({ id }: { id: string }) {
                   {project.category}
                 </span>
               )}
+              <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-medium ${complexityBadge[project.complexity] ?? complexityBadge.MEDIUM}`}>
+                Complexidade {complexityLabels[project.complexity as keyof typeof complexityLabels] ?? project.complexity}
+              </span>
             </div>
             <h2 className="text-2xl font-bold text-white">{project.title}</h2>
             <p className="max-w-2xl text-sm text-[#9999a8] leading-relaxed">{project.description}</p>

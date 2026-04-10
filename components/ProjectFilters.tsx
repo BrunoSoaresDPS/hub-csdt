@@ -1,12 +1,13 @@
 'use client';
 
-import { projectStatuses, priorityLabels } from '../lib/validators';
+import { projectStatuses, priorityLabels, complexityLabels } from '../lib/validators';
 
 interface ProjectFiltersProps {
   filters: {
     status: string;
     owner: string;
     priority: string;
+    complexity: string;
     search: string;
     startDate: string;
     endDate: string;
@@ -26,7 +27,7 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
           <button
             type="button"
             onClick={() => {
-              const empty = { status: '', owner: '', priority: '', search: '', startDate: '', endDate: '' };
+              const empty = { status: '', owner: '', priority: '', complexity: '', search: '', startDate: '', endDate: '' };
               Object.entries(empty).forEach(([k, v]) => onChange(k, v));
             }}
             className="text-xs text-[#555562] transition-colors hover:text-white"
@@ -70,6 +71,20 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
           >
             <option value="">Todas</option>
             {Object.entries(priorityLabels).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="iveco-label mb-1.5 block">Complexidade</label>
+          <select
+            value={filters.complexity}
+            onChange={(e) => onChange('complexity', e.target.value)}
+            className="iveco-input"
+          >
+            <option value="">Todas</option>
+            {Object.entries(complexityLabels).map(([value, label]) => (
               <option key={value} value={value}>{label}</option>
             ))}
           </select>

@@ -10,6 +10,7 @@ interface Project {
   owner: string;
   status: string;
   priority: string;
+  complexity: string;
   category: string;
   startDate: string;
   endDate: string;
@@ -25,6 +26,7 @@ export default function DashboardShell() {
     status: '',
     owner: '',
     priority: '',
+    complexity: '',
     search: '',
     startDate: '',
     endDate: '',

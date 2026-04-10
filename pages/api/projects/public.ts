@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 import { sanitizeInput } from '../../../lib/validators';
+import { assessComplexity } from '../../../lib/complexity';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -29,6 +30,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: 'Nenhum administrador configurado.' });
   }
 
+  const complexity = assessComplexity({
+    title: sanitizeInput(title),
+    description: sanitizeInput(description),
+    category: sanitizeInput(category),
+  });
+
   const today = new Date();
   const project = await prisma.project.create({
     data: {
@@ -38,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       category: sanitizeInput(category),
       status: 'REVIEW',
       priority: 'MEDIUM',
+      complexity,
       startDate: today,
       endDate: today,
       authorId: admin.id,
