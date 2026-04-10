@@ -4,16 +4,25 @@ import { useState } from 'react';
 import Link from 'next/link';
 import IvecoLogo from '../components/IvecoLogo';
 
-export default function HomePage() {
-  const [form, setForm] = useState({ title: '', description: '', owner: '' });
-  const [status, setStatus] = useState({ loading: false, message: '', error: false });
+const CATEGORIES = [
+  { value: 'Chatbot', icon: '💬' },
+  { value: 'Ferramentas de IA', icon: '🤖' },
+  { value: 'Dashboards', icon: '📊' },
+  { value: 'Automação', icon: '⚙️' },
+  { value: 'Plataforma e Programas', icon: '🖥️' },
+  { value: 'Solução Completa', icon: '🚀' },
+];
 
-  const handleChange = (key: string, value: string) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
+export default function HomePage() {
+  const [form, setForm] = useState({ title: '', description: '', owner: '', category: '' });
+  const [status, setStatus] = useState({ loading: false, message: '', error: false });
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!form.category) {
+      setStatus({ loading: false, message: 'Selecione uma categoria para o projeto.', error: true });
+      return;
+    }
     setStatus({ loading: true, message: '', error: false });
 
     const response = await fetch('/api/projects/public', {
@@ -28,19 +37,15 @@ export default function HomePage() {
     }
 
     setStatus({ loading: false, message: 'Projeto enviado com sucesso! Nossa equipe entrará em contato.', error: false });
-    setForm({ title: '', description: '', owner: '' });
+    setForm({ title: '', description: '', owner: '', category: '' });
   };
 
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* Top bar */}
       <header className="border-b border-[#1a1a1e] bg-[#080808]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <IvecoLogo size="md" showTagline />
-          <Link
-            href="/login"
-            className="text-xs font-semibold uppercase tracking-[0.12em] text-[#555562] transition-colors hover:text-white"
-          >
+          <Link href="/login" className="text-xs font-semibold uppercase tracking-[0.12em] text-[#555562] transition-colors hover:text-white">
             Acesso admin →
           </Link>
         </div>
@@ -50,16 +55,15 @@ export default function HomePage() {
 
       <main className="flex-1 px-6 py-12 sm:px-10">
         <div className="mx-auto max-w-7xl">
-          <div className="grid gap-12 lg:grid-cols-[1fr_480px] lg:gap-16 lg:items-start">
+          <div className="grid gap-12 lg:grid-cols-[1fr_520px] lg:gap-16 lg:items-start">
 
-            {/* Left: hero */}
+            {/* Hero */}
             <div className="space-y-8 pt-2">
               <div className="space-y-2">
                 <p className="iveco-label text-[#1654FF]">Portal de Projetos</p>
                 <h1 className="text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
                   Registre seu<br />
-                  <span className="text-[#1654FF]">projeto</span>{' '}
-                  aqui.
+                  <span className="text-[#1654FF]">projeto</span> aqui.
                 </h1>
                 <p className="mt-4 max-w-md text-base text-[#9999a8] leading-relaxed">
                   Qualquer pessoa pode submeter novos projetos. Nosso time administrativo receberá, avaliará e gerenciará cada solicitação no painel interno.
@@ -93,7 +97,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right: form */}
+            {/* Form */}
             <div className="iveco-card animate-fade-in">
               <div className="border-b border-[#232329] px-6 py-5">
                 <div className="flex items-center justify-between">
@@ -107,13 +111,42 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4 p-6">
+              <form onSubmit={handleSubmit} className="space-y-5 p-6">
+
+                {/* Category */}
+                <div>
+                  <label className="iveco-label mb-3 block">
+                    Categoria do projeto
+                    <span className="ml-1 text-rose-400">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {CATEGORIES.map((cat) => {
+                      const selected = form.category === cat.value;
+                      return (
+                        <button
+                          key={cat.value}
+                          type="button"
+                          onClick={() => setForm((prev) => ({ ...prev, category: cat.value }))}
+                          className={`flex flex-col items-start gap-1.5 rounded-lg border px-3 py-3 text-left transition-all ${
+                            selected
+                              ? 'border-[#1654FF] bg-[#1654FF]/10 text-white shadow-blue-sm'
+                              : 'border-[#232329] bg-[#17171b] text-[#9999a8] hover:border-[#3a3a46] hover:text-white'
+                          }`}
+                        >
+                          <span className="text-base leading-none">{cat.icon}</span>
+                          <span className="text-xs font-semibold leading-tight">{cat.value}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div>
                   <label className="iveco-label mb-1.5 block">Nome do projeto</label>
                   <input
                     required
                     value={form.title}
-                    onChange={(e) => handleChange('title', e.target.value)}
+                    onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
                     placeholder="Ex: Expansão de frota Sul"
                     className="iveco-input"
                   />
@@ -124,9 +157,9 @@ export default function HomePage() {
                   <textarea
                     required
                     value={form.description}
-                    onChange={(e) => handleChange('description', e.target.value)}
+                    onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
                     placeholder="Objetivos, escopo, entregas esperadas..."
-                    rows={5}
+                    rows={4}
                     className="iveco-input resize-none"
                   />
                 </div>
@@ -136,18 +169,14 @@ export default function HomePage() {
                   <input
                     required
                     value={form.owner}
-                    onChange={(e) => handleChange('owner', e.target.value)}
+                    onChange={(e) => setForm((p) => ({ ...p, owner: e.target.value }))}
                     placeholder="Nome do responsável"
                     className="iveco-input"
                   />
                 </div>
 
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={status.loading}
-                    className="iveco-btn-primary w-full py-3 text-base"
-                  >
+                <div className="pt-1">
+                  <button type="submit" disabled={status.loading} className="iveco-btn-primary w-full py-3 text-base">
                     {status.loading ? (
                       <span className="flex items-center gap-2">
                         <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -156,9 +185,7 @@ export default function HomePage() {
                         </svg>
                         Enviando...
                       </span>
-                    ) : (
-                      'Enviar projeto'
-                    )}
+                    ) : 'Enviar projeto'}
                   </button>
 
                   {status.message && (
@@ -179,9 +206,7 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t border-[#17171b] py-6 text-center">
-        <p className="text-xs text-[#333340]">
-          © {new Date().getFullYear()} IVECO Hub CSDT. Todos os direitos reservados.
-        </p>
+        <p className="text-xs text-[#333340]">© {new Date().getFullYear()} IVECO Hub CSDT. Todos os direitos reservados.</p>
       </footer>
     </div>
   );

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "WebSearch",
+      "WebFetch(domain:design.iveco.ivecogroup.com)",
+      "WebFetch(domain:logotyp.us)",
+      "WebFetch(domain:1000logos.net)",
+      "WebFetch(domain:autobrandpalette.com)",
+      "WebFetch(domain:brandfetch.com)",
+      "WebFetch(domain:issuu.com)",
+      "Bash(vercel:*)",
+      "Bash(npm list:*)",
+      "Bash(npx vercel:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npx dotenv:*)"
+    ]
+  }
+}

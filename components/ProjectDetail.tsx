@@ -12,6 +12,7 @@ interface TaskProject {
   owner: string;
   status: string;
   priority: string;
+  category: string;
   startDate: string;
   endDate: string;
   fileUrl?: string;
@@ -105,6 +106,11 @@ export default function ProjectDetail({ id }: { id: string }) {
                   Prioridade {priorityLabels[project.priority as keyof typeof priorityLabels] ?? project.priority}
                 </span>
               </div>
+              {project.category && (
+                <span className="inline-flex rounded-full border border-[#1654FF]/25 bg-[#1654FF]/10 px-2.5 py-0.5 text-xs font-medium text-[#7B9FFF]">
+                  {project.category}
+                </span>
+              )}
             </div>
             <h2 className="text-2xl font-bold text-white">{project.title}</h2>
             <p className="max-w-2xl text-sm text-[#9999a8] leading-relaxed">{project.description}</p>

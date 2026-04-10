@@ -29,6 +29,7 @@ model Project {
   endDate        DateTime
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  category       String    @default("Outros")
   fileUrl        String?
   changeLogs     ChangeLog[]
   authorId       String

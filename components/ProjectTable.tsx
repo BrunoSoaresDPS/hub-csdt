@@ -10,6 +10,7 @@ interface Project {
   owner: string;
   status: string;
   priority: string;
+  category: string;
   startDate: string;
   endDate: string;
   updatedAt: string;
@@ -41,10 +42,10 @@ export default function ProjectTable({ projects }: { projects: Project[] }) {
           <thead>
             <tr className="border-b border-[#232329] bg-[#17171b]">
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Projeto</th>
+              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Categoria</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Responsável</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Status</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Prioridade</th>
-              <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]">Término</th>
               <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.1em] text-[#555562]"></th>
             </tr>
           </thead>
@@ -59,6 +60,11 @@ export default function ProjectTable({ projects }: { projects: Project[] }) {
                   <p className="mt-0.5 text-xs text-[#555562]">
                     Atualizado em {new Date(project.updatedAt).toLocaleDateString('pt-BR')}
                   </p>
+                </td>
+                <td className="px-5 py-4">
+                  <span className="inline-flex rounded-full border border-[#1654FF]/25 bg-[#1654FF]/10 px-2.5 py-0.5 text-xs font-medium text-[#7B9FFF]">
+                    {project.category || '—'}
+                  </span>
                 </td>
                 <td className="px-5 py-4 text-[#9999a8]">{project.owner}</td>
                 <td className="px-5 py-4">

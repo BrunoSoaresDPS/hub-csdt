@@ -7,7 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { title, description, owner } = req.body;
+  const { title, description, owner, category } = req.body;
+
+  const validCategories = ['Chatbot', 'Ferramentas de IA', 'Dashboards', 'Automação', 'Plataforma e Programas', 'Solução Completa'];
 
   if (!title || typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ error: 'Título do projeto é obrigatório.' });
@@ -17,6 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   if (!owner || typeof owner !== 'string' || !owner.trim()) {
     return res.status(400).json({ error: 'Responsável é obrigatório.' });
+  }
+  if (!category || !validCategories.includes(category)) {
+    return res.status(400).json({ error: 'Selecione uma categoria válida.' });
   }
 
   const admin = await prisma.user.findFirst();
@@ -30,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       title: sanitizeInput(title),
       description: sanitizeInput(description),
       owner: sanitizeInput(owner),
+      category: sanitizeInput(category),
       status: 'REVIEW',
       priority: 'MEDIUM',
       startDate: today,

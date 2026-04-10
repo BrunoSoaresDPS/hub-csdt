@@ -10,6 +10,7 @@ interface Project {
   owner: string;
   status: string;
   priority: string;
+  category: string;
   startDate: string;
   endDate: string;
   updatedAt: string;
