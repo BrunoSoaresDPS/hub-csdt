@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import StatusPill from './StatusPill';
-import { projectStatuses, priorityLabels, complexityLabels } from '../lib/validators';
+import { projectStatuses, priorityLabels, complexityLabels, impactFinancialLabels, impactTimeLabels } from '../lib/validators';
 
 interface TaskProject {
   id: string;
@@ -13,7 +13,10 @@ interface TaskProject {
   status: string;
   priority: string;
   complexity: string;
-  category: string;
+  categories: string;
+  impactFinancial?: string;
+  impactTime?: string;
+  additionalQuestions?: string;
   startDate: string;
   endDate: string;
   fileUrl?: string;
@@ -113,11 +116,18 @@ export default function ProjectDetail({ id }: { id: string }) {
                   Prioridade {priorityLabels[project.priority as keyof typeof priorityLabels] ?? project.priority}
                 </span>
               </div>
-              {project.category && (
-                <span className="inline-flex rounded-full border border-[#1654FF]/25 bg-[#1654FF]/10 px-2.5 py-0.5 text-xs font-medium text-[#7B9FFF]">
-                  {project.category}
-                </span>
-              )}
+              {(() => {
+                try {
+                  const cats = JSON.parse(project.categories || '[]');
+                  return cats.map((cat: string) => (
+                    <span key={cat} className="inline-flex rounded-full border border-[#1654FF]/25 bg-[#1654FF]/10 px-2.5 py-0.5 text-xs font-medium text-[#7B9FFF]">
+                      {cat}
+                    </span>
+                  ));
+                } catch {
+                  return null;
+                }
+              })()}
               <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-medium ${complexityBadge[project.complexity] ?? complexityBadge.MEDIUM}`}>
                 Complexidade {complexityLabels[project.complexity as keyof typeof complexityLabels] ?? project.complexity}
               </span>
@@ -151,13 +161,43 @@ export default function ProjectDetail({ id }: { id: string }) {
               label: 'Término previsto',
               value: new Date(project.endDate).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }),
             },
-          ].map((item) => (
+            project.impactFinancial && {
+              label: 'Impacto Financeiro',
+              value: impactFinancialLabels[project.impactFinancial as keyof typeof impactFinancialLabels],
+            },
+            project.impactTime && {
+              label: 'Prazo',
+              value: impactTimeLabels[project.impactTime as keyof typeof impactTimeLabels],
+            },
+          ].filter(Boolean).map((item: any) => (
             <div key={item.label} className="rounded-lg border border-[#232329] bg-[#17171b] px-4 py-3">
               <p className="iveco-label">{item.label}</p>
               <p className="mt-1 text-sm font-semibold text-white">{item.value}</p>
             </div>
           ))}
         </div>
+
+        {project.additionalQuestions && (() => {
+          try {
+            const answers = JSON.parse(project.additionalQuestions);
+            if (Object.keys(answers).length > 0) {
+              return (
+                <div className="mt-5 iveco-card p-4">
+                  <p className="iveco-label mb-3">Informações Adicionais</p>
+                  <ul className="space-y-2">
+                    {Object.entries(answers).map(([key, value]) => (
+                      <li key={key} className="text-sm text-[#9999a8]">
+                        <span className="text-white font-medium capitalize">{key.replace(/_/g, ' ')}:</span> {String(value)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            }
+          } catch {
+            return null;
+          }
+        })()}
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">

@@ -14,7 +14,12 @@
       "Bash(npx vercel:*)",
       "Bash(npm install:*)",
       "Bash(npx prisma:*)",
-      "Bash(npx dotenv:*)"
+      "Bash(npx dotenv:*)",
+      "Bash(set POSTGRES_PRISMA_URL=postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require)",
+      "Bash(set POSTGRES_URL_NON_POOLING=postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie.sa-east-1.aws.neon.tech/neondb?sslmode=require)",
+      "Bash(POSTGRES_PRISMA_URL=\"postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require\" POSTGRES_URL_NON_POOLING=\"postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie.sa-east-1.aws.neon.tech/neondb?sslmode=require\" npx prisma migrate dev --name add_complexity_field)",
+      "Bash(POSTGRES_PRISMA_URL=\"postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require\" POSTGRES_URL_NON_POOLING=\"postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie.sa-east-1.aws.neon.tech/neondb?sslmode=require\" npx prisma db push)",
+      "Bash(POSTGRES_PRISMA_URL=\"postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require\" POSTGRES_URL_NON_POOLING=\"postgresql://neondb_owner:npg_gOALPWF7V3Rm@ep-wispy-rain-acq05gie.sa-east-1.aws.neon.tech/neondb?sslmode=require\" npx next build)"
     ]
   }
 }

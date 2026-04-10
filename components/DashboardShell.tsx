@@ -11,7 +11,7 @@ interface Project {
   status: string;
   priority: string;
   complexity: string;
-  category: string;
+  categories: string;
   startDate: string;
   endDate: string;
   updatedAt: string;

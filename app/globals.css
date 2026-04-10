@@ -76,7 +76,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   }
 
   .iveco-input {
-    @apply w-full rounded-lg border border-[#232329] bg-[#17171b] px-4 py-2.5 text-sm text-white placeholder-[#555562] outline-none transition-colors focus:border-[#1654FF] focus:bg-[#0f0f11];
+    @apply w-full rounded-lg border border-[#232329] bg-[#17171b] px-4 py-2.5 text-sm text-white placeholder-[#6b6b7a] outline-none transition-colors focus:border-[#1654FF] focus:bg-[#0f0f11];
   }
 
   .iveco-btn-primary {

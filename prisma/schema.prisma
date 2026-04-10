@@ -32,6 +32,10 @@ model Project {
   category       String    @default("Outros")
   fileUrl        String?
   complexity     Complexity @default(MEDIUM)
+  categories     String     // JSON array: ["Chatbot", "Dashboards"]
+  impactFinancial ImpactFinancial?
+  impactTime     ImpactTime?
+  additionalQuestions String? // JSON: { "language": "PT-BR", "integrations": "Sim" }
   changeLogs     ChangeLog[]
   authorId       String
   author         User @relation(fields: [authorId], references: [id])
@@ -54,6 +58,18 @@ enum Complexity {
   LOW
   MEDIUM
   HIGH
+}
+
+enum ImpactFinancial {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ImpactTime {
+  SHORT
+  MEDIUM
+  LONG
 }
 
 model ChangeLog {

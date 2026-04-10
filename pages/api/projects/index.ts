@@ -53,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         title: sanitizeInput(data.title),
         description: sanitizeInput(data.description),
         owner: sanitizeInput(data.owner),
+        categories: JSON.stringify(['Outros']),
         startDate: new Date(data.startDate),
         endDate: new Date(data.endDate),
         status: data.status,
