@@ -52,6 +52,8 @@ export default function ImpactSelector({
     LOW: 'border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 data-[selected=true]:border-emerald-500 data-[selected=true]:bg-emerald-500/20',
     MEDIUM: 'border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 data-[selected=true]:border-amber-500 data-[selected=true]:bg-amber-500/20',
     HIGH: 'border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 data-[selected=true]:border-rose-500 data-[selected=true]:bg-rose-500/20',
+    SHORT: 'border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 data-[selected=true]:border-emerald-500 data-[selected=true]:bg-emerald-500/20',
+    LONG: 'border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 data-[selected=true]:border-rose-500 data-[selected=true]:bg-rose-500/20',
   };
 
   return (
