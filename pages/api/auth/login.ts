@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const isProduction = process.env.NODE_ENV === 'production';
   const cookieParts = [`hub_token=${token}`, 'HttpOnly', 'Path=/', 'Max-Age=28800'];
   if (isProduction) {
-    cookieParts.push('Secure', 'SameSite=None');
+    cookieParts.push('Secure', 'SameSite=Lax');
   } else {
     cookieParts.push('SameSite=Lax');
   }
