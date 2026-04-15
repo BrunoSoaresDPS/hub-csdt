@@ -20,17 +20,19 @@ interface FormData {
 type StepType = 'categories' | 'financial' | 'time' | 'title' | 'description' | 'owner' | 'area' | 'dynamic' | 'review' | 'success';
 
 const AREAS = [
-  'Financeiro',
-  'Comercial / Vendas',
-  'Recursos Humanos',
-  'Compras / Suprimentos',
-  'TI / Tecnologia',
-  'Operações / Produção',
-  'Jurídico / Compliance',
-  'Marketing / Comunicação',
-  'Logística',
-  'Gestão / Diretoria',
-  'Outra área',
+  'Service Solutions',
+  'Parts',
+  'Lifecycle',
+  'Customer Care',
+  'Customer Support',
+  'Product Support',
+  'Pricing',
+  'Business Intelligence',
+  'Parts Commercial',
+  'Sell Administration',
+  'Product Marketing',
+  'Communication Marketing',
+  'DPS and Prim',
 ];
 
 interface TypeformFlowProps {

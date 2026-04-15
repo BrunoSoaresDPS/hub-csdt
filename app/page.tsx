@@ -82,7 +82,7 @@ export default function HomePage() {
                   onClick={() => setShowForm(true)}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-[#1654FF] text-white font-bold rounded-lg hover:bg-[#0D3FCC] transition-all shadow-lg hover:shadow-[#1654FF]/40 hover:shadow-2xl group"
                 >
-                  <span>Submeter Projeto</span>
+                  <span>Iniciar Pedido</span>
                   <svg className="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
