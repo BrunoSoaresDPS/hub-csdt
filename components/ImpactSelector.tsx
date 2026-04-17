@@ -79,6 +79,13 @@ export default function ImpactSelector({
             <p className="text-xs text-current/80 leading-relaxed">{option.description}</p>
           </button>
         ))}
+        <button
+          type="button"
+          onClick={onNext}
+          className="mt-1 text-sm text-[#555562] hover:text-[#9999a8] transition-colors text-center py-2"
+        >
+          Pular esta etapa
+        </button>
       </div>
     </FormStep>
   );
