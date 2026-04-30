@@ -184,6 +184,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
         return;
       }
 
+      setLoading(false);
       setCurrentStep('success');
       if (onSuccess) onSuccess();
     } catch (err) {
