@@ -45,27 +45,26 @@ export default function DashboardShell() {
     return params.toString();
   }, [filters, page]);
 
-  async function loadProjects() {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await fetch(`/api/projects?${query}`);
-      if (!response.ok) {
-        const data = await response.json();
-        setError(data.error || 'Erro ao carregar projetos.');
-        return;
-      }
-      const data = await response.json();
-      setProjects(data.projects);
-      setTotal(data.total);
-    } catch {
-      setError('Erro de conexão.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    async function loadProjects() {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await fetch(`/api/projects?${query}`);
+        if (!response.ok) {
+          const data = await response.json();
+          setError(data.error || 'Erro ao carregar projetos.');
+          return;
+        }
+        const data = await response.json();
+        setProjects(data.projects);
+        setTotal(data.total);
+      } catch {
+        setError('Erro de conexão.');
+      } finally {
+        setLoading(false);
+      }
+    }
     loadProjects();
   }, [query]);
 

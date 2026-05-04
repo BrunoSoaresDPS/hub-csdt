@@ -351,7 +351,6 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
 
   if (currentStep === 'dynamic' && dynamicQuestions.length > 0) {
     const question = dynamicQuestions[dynamicQuestionIndex];
-    const isLastDynamic = dynamicQuestionIndex === dynamicQuestions.length - 1;
 
     return (
       <FormStep
