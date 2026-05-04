@@ -65,6 +65,11 @@ export function validatePublicFormPayload(data: any) {
     errors.push('Responsável é obrigatório.');
   }
 
+  // Validação de área (obrigatória)
+  if (!data.additionalAnswers?.area || typeof data.additionalAnswers.area !== 'string' || !data.additionalAnswers.area.trim()) {
+    errors.push('Área interessada é obrigatória.');
+  }
+
   // Validação de impactos (opcionais, mas se fornecidos devem ser válidos)
   const validImpactFinancial = ['LOW', 'MEDIUM', 'HIGH'];
   const validImpactTime = ['SHORT', 'MEDIUM', 'LONG'];
