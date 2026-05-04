@@ -17,11 +17,14 @@ interface Project {
   updatedAt: string;
 }
 
+const PAGE_SIZE = 10;
+
 export default function DashboardShell() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({
     status: '',
     owner: '',
@@ -37,8 +40,10 @@ export default function DashboardShell() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) params.set(key, value);
     });
+    params.set('page', String(page));
+    params.set('pageSize', String(PAGE_SIZE));
     return params.toString();
-  }, [filters]);
+  }, [filters, page]);
 
   async function loadProjects() {
     setLoading(true);
@@ -62,7 +67,9 @@ export default function DashboardShell() {
 
   useEffect(() => {
     loadProjects();
-  }, []);
+  }, [query]);
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <div className="space-y-5 animate-fade-in">
@@ -78,8 +85,14 @@ export default function DashboardShell() {
 
       <ProjectFilters
         filters={filters}
-        onChange={(field, value) => setFilters((prev) => ({ ...prev, [field]: value }))}
-        onApply={loadProjects}
+        onChange={(field, value) => {
+          setPage(1);
+          setFilters((prev) => ({ ...prev, [field]: value }));
+        }}
+        onApply={() => {
+          setPage(1);
+          loadProjects();
+        }}
       />
 
       {error && (
@@ -100,6 +113,36 @@ export default function DashboardShell() {
         </div>
       ) : (
         <ProjectTable projects={projects} />
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2">
+          <p className="text-sm text-[#555562]">
+            Página {page} de {totalPages}
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#232329] bg-[#17171b] px-3 py-1.5 text-sm font-medium text-[#d4d4d8] transition-colors hover:border-[#1654FF]/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Anterior
+            </button>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#232329] bg-[#17171b] px-3 py-1.5 text-sm font-medium text-[#d4d4d8] transition-colors hover:border-[#1654FF]/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Próxima
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
