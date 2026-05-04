@@ -54,7 +54,23 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
   const [dynamicQuestionIndex, setDynamicQuestionIndex] = useState(0);
   const [stepHistory, setStepHistory] = useState<StepType[]>(['categories']);
 
-  const dynamicQuestions = getDynamicQuestions(formData.categories).filter(q => {
+  const allDynamicQuestions = getDynamicQuestions(formData.categories);
+
+  const clearConditionalAnswers = (
+    triggerKey: string,
+    triggerValue: string,
+    currentAnswers: Record<string, string>
+  ): Record<string, string> => {
+    const cleaned = { ...currentAnswers };
+    for (const q of allDynamicQuestions) {
+      if (q.conditional === triggerKey && q.conditionalValue !== triggerValue) {
+        delete cleaned[q.key];
+      }
+    }
+    return cleaned;
+  };
+
+  const dynamicQuestions = allDynamicQuestions.filter(q => {
     if (q.conditional) {
       return formData.additionalAnswers[q.conditional] === q.conditionalValue;
     }
@@ -345,7 +361,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
         onNext={handleDynamicQuestionNext}
         onBack={handleBack}
         nextDisabled={!formData.additionalAnswers[question.key]}
-        isLast={isLastDynamic}
+        isLast={false}
       >
         {question.type === 'text' && (
           <input
@@ -369,12 +385,14 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
               <button
                 key={option}
                 type="button"
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    additionalAnswers: { ...formData.additionalAnswers, [question.key]: option },
-                  })
-                }
+                onClick={() => {
+                  const updated = clearConditionalAnswers(
+                    question.key,
+                    option,
+                    { ...formData.additionalAnswers, [question.key]: option }
+                  );
+                  setFormData({ ...formData, additionalAnswers: updated });
+                }}
                 className={`py-3 px-4 rounded-lg border text-left font-medium transition-all ${
                   formData.additionalAnswers[question.key] === option
                     ? 'border-[#1654FF] bg-[#1654FF]/10 text-white'

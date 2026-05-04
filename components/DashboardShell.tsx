@@ -91,7 +91,6 @@ export default function DashboardShell() {
         }}
         onApply={() => {
           setPage(1);
-          loadProjects();
         }}
       />
 
