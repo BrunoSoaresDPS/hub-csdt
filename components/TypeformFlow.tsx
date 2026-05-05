@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import FormStep from './FormStep';
 import CategorySelector from './CategorySelector';
 import ImpactSelector from './ImpactSelector';
-import { getDynamicQuestions } from '../lib/formFlow';
+import { CATEGORY_CONFIG, getDynamicQuestions } from '../lib/formFlow';
 
 interface FormData {
   categories: string[];
@@ -54,7 +54,21 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
   const [dynamicQuestionIndex, setDynamicQuestionIndex] = useState(0);
   const [stepHistory, setStepHistory] = useState<StepType[]>(['categories']);
 
-  const allDynamicQuestions = getDynamicQuestions(formData.categories);
+  const allDynamicQuestions = useMemo(
+    () => getDynamicQuestions(formData.categories),
+    [formData.categories]
+  );
+
+  const dynamicQuestions = useMemo(
+    () =>
+      allDynamicQuestions.filter((q) => {
+        if (q.conditional) {
+          return formData.additionalAnswers[q.conditional] === q.conditionalValue;
+        }
+        return true;
+      }),
+    [allDynamicQuestions, formData.additionalAnswers]
+  );
 
   const clearConditionalAnswers = (
     triggerKey: string,
@@ -70,15 +84,9 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     return cleaned;
   };
 
-  const dynamicQuestions = allDynamicQuestions.filter(q => {
-    if (q.conditional) {
-      return formData.additionalAnswers[q.conditional] === q.conditionalValue;
-    }
-    return true;
-  });
-
   // Fixed steps: categories, financial, time, title, description, owner, area, review = 8
-  const totalSteps = 8 + dynamicQuestions.length;
+  // Total uses allDynamicQuestions so the count stays stable as conditionals appear/disappear
+  const totalSteps = 8 + allDynamicQuestions.length;
 
   const getStepNumber = (): number => {
     const fixedOrder: StepType[] = ['categories', 'financial', 'time', 'title', 'description', 'owner', 'area'];
@@ -87,6 +95,24 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     if (currentStep === 'dynamic') return fixedOrder.length + 1 + dynamicQuestionIndex;
     if (currentStep === 'review') return fixedOrder.length + 1 + dynamicQuestions.length;
     return 1;
+  };
+
+  // Fix: clean additionalAnswers belonging to removed categories
+  const handleCategoriesChange = (newCategories: string[]) => {
+    const removedCategories = formData.categories.filter((c) => !newCategories.includes(c));
+    if (removedCategories.length === 0) {
+      setFormData((prev) => ({ ...prev, categories: newCategories }));
+      return;
+    }
+    const removedKeys = new Set<string>(
+      removedCategories.flatMap((cat) =>
+        (CATEGORY_CONFIG[cat]?.dynamicQuestions ?? []).map((q) => q.key)
+      )
+    );
+    const cleanedAnswers = Object.fromEntries(
+      Object.entries(formData.additionalAnswers).filter(([key]) => !removedKeys.has(key))
+    );
+    setFormData((prev) => ({ ...prev, categories: newCategories, additionalAnswers: cleanedAnswers }));
   };
 
   const handleCategoriesNext = () => {
@@ -167,10 +193,12 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
     }
   };
 
+  // Fix: guard against step not found in history
   const handleEditStep = (step: StepType) => {
+    const index = stepHistory.indexOf(step);
+    if (index === -1) return;
     setCurrentStep(step);
-    const newHistory = stepHistory.slice(0, stepHistory.indexOf(step) + 1);
-    setStepHistory(newHistory);
+    setStepHistory(stepHistory.slice(0, index + 1));
   };
 
   const handleSubmit = async () => {
@@ -211,12 +239,11 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
 
   const progress = { current: getStepNumber(), total: totalSteps };
 
-  // Renderizar steps
   if (currentStep === 'categories') {
     return (
       <CategorySelector
         selected={formData.categories}
-        onChange={(categories) => setFormData({ ...formData, categories })}
+        onChange={handleCategoriesChange}
         onNext={handleCategoriesNext}
         progress={progress}
       />
@@ -267,6 +294,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
           type="text"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onKeyDown={(e) => { if (e.key === 'Enter' && formData.title.trim()) handleTitleNext(); }}
           placeholder="Ex: Expansão de frota Sul"
           className="iveco-input text-lg py-3"
           autoFocus
@@ -311,6 +339,7 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
           type="text"
           value={formData.owner}
           onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
+          onKeyDown={(e) => { if (e.key === 'Enter' && formData.owner.trim()) handleOwnerNext(); }}
           placeholder="Nome do responsável"
           className="iveco-input text-lg py-3"
           autoFocus
@@ -372,6 +401,11 @@ export default function TypeformFlow({ onSuccess }: TypeformFlowProps) {
                 additionalAnswers: { ...formData.additionalAnswers, [question.key]: e.target.value },
               })
             }
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && formData.additionalAnswers[question.key]) {
+                handleDynamicQuestionNext();
+              }
+            }}
             placeholder={question.placeholder || 'Sua resposta...'}
             className="iveco-input text-lg py-3"
             autoFocus

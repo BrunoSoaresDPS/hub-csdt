@@ -118,7 +118,7 @@ export default function DashboardShell() {
           <p className="text-sm text-[#555562]">
             Página {page} de {totalPages}
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
@@ -129,6 +129,39 @@ export default function DashboardShell() {
               </svg>
               Anterior
             </button>
+
+            {(() => {
+              const pages: (number | '...')[] = [];
+              if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i);
+              } else {
+                pages.push(1);
+                if (page > 3) pages.push('...');
+                for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) {
+                  pages.push(i);
+                }
+                if (page < totalPages - 2) pages.push('...');
+                pages.push(totalPages);
+              }
+              return pages.map((p, i) =>
+                p === '...' ? (
+                  <span key={`ellipsis-${i}`} className="px-1 text-sm text-[#555562]">…</span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => setPage(p)}
+                    className={`min-w-[32px] rounded-lg border px-2 py-1.5 text-sm font-medium transition-colors ${
+                      page === p
+                        ? 'border-[#1654FF] bg-[#1654FF]/15 text-white'
+                        : 'border-[#232329] bg-[#17171b] text-[#d4d4d8] hover:border-[#1654FF]/50 hover:text-white'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                )
+              );
+            })()}
+
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
