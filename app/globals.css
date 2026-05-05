@@ -1,6 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-iveco-blue: #1654FF;
+  --color-iveco-blue-dark: #0D3FCC;
+  --color-iveco-blue-light: #3A6FFF;
+  --color-iveco-blue-dim: #1654FF26;
+
+  --color-surface: #0F0F11;
+  --color-surface-raised: #17171B;
+  --color-surface-high: #1F1F25;
+
+  --color-ink: #080808;
+
+  --color-border: #232329;
+  --color-border-subtle: #17171B;
+
+  --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.6), 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-blue: 0 0 0 3px rgba(22,84,255,0.25);
+  --shadow-blue-sm: 0 0 0 2px rgba(22,84,255,0.20);
+
+  --animate-fade-in: fadeIn 0.2s ease-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
 
 :root {
   color-scheme: dark;
@@ -59,13 +86,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
   background: rgba(22, 84, 255, 0.3);
 }
 
-/* Focus ring */
 :focus-visible {
   outline: 2px solid #1654ff;
   outline-offset: 2px;
 }
 
-/* Iveco brand accent line utility */
 @layer components {
   .iveco-border-l {
     border-left: 3px solid #1654ff;

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { parse } from 'cookie';
-import { verifyToken } from '../../lib/jwt';
-import { prisma } from '../../lib/prisma';
+import { verifyToken } from './jwt';
+import { prisma } from './prisma';
 
 export async function authenticateRequest(req: NextApiRequest, res: NextApiResponse) {
   const cookieHeader = req.headers.cookie;

@@ -1,18 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProjectDetail from '../../../../components/ProjectDetail';
 import Topbar from '../../../../components/Topbar';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export const dynamic = 'force-dynamic';
 
 export default function ProjectPage({ params }: Props) {
+  const { id } = use(params);
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,7 @@ export default function ProjectPage({ params }: Props) {
             <span className="text-[#9999a8]">Projeto</span>
           </nav>
 
-          <ProjectDetail id={params.id} />
+          <ProjectDetail id={id} />
         </div>
       </main>
     </div>
