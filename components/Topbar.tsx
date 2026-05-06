@@ -1,9 +1,22 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import IvecoLogo from './IvecoLogo';
 
-export default function Topbar({ title }: { title: string }) {
+type ActiveRoute = 'overview' | 'projects' | 'detail' | undefined;
+
+interface TopbarProps {
+  title: string;
+  activeRoute?: ActiveRoute;
+}
+
+const navLinks = [
+  { label: 'Visão Geral', href: '/dashboard', route: 'overview' as ActiveRoute },
+  { label: 'Projetos',    href: '/dashboard/projetos', route: 'projects' as ActiveRoute },
+];
+
+export default function Topbar({ title, activeRoute }: TopbarProps) {
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -13,10 +26,10 @@ export default function Topbar({ title }: { title: string }) {
 
   return (
     <header className="mb-8">
-      {/* Blue brand line */}
       <div className="h-[3px] bg-[#1654FF]" />
 
       <div className="border-b border-[#1a1a1e] bg-[#0a0a0c]">
+        {/* Top bar */}
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-6">
             <IvecoLogo size="sm" />
@@ -40,6 +53,26 @@ export default function Topbar({ title }: { title: string }) {
             </button>
           </div>
         </div>
+
+        {/* Navigation tabs */}
+        <nav className="flex items-center gap-1 px-6">
+          {navLinks.map((item) => {
+            const isActive = activeRoute === item.route;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`relative px-4 py-3 text-sm font-semibold transition-colors ${
+                  isActive
+                    ? 'text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#1654FF]'
+                    : 'text-[#555562] hover:text-[#9999a8]'
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </header>
   );

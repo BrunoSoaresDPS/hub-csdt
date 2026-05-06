@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!user) return sendUnauthorized(res);
 
   if (req.method === 'GET') {
-    const { status, owner, priority, complexity, search, startDate, endDate, page = '1', pageSize = '10' } = req.query;
+    const { status, owner, priority, complexity, impactFinancial, impactTime, search, startDate, endDate, page = '1', pageSize = '10' } = req.query;
     const pageNumber = Math.max(Number(page), 1);
     const take = Math.max(Number(pageSize), 10);
     const skip = (pageNumber - 1) * take;
@@ -17,6 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (status) filters.status = status;
     if (priority) filters.priority = priority;
     if (complexity) filters.complexity = complexity;
+    if (impactFinancial) filters.impactFinancial = impactFinancial;
+    if (impactTime) filters.impactTime = impactTime;
     if (owner) filters.owner = { contains: String(owner), mode: 'insensitive' };
     if (search) {
       filters.OR = [

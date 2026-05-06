@@ -30,6 +30,8 @@ export default function DashboardShell() {
     owner: '',
     priority: '',
     complexity: '',
+    impactFinancial: '',
+    impactTime: '',
     search: '',
     startDate: '',
     endDate: '',

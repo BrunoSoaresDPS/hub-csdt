@@ -1,6 +1,6 @@
 'use client';
 
-import { projectStatuses, priorityLabels, complexityLabels } from '../lib/validators';
+import { projectStatuses, priorityLabels, complexityLabels, impactFinancialLabels, impactTimeLabels } from '../lib/validators';
 
 interface ProjectFiltersProps {
   filters: {
@@ -8,6 +8,8 @@ interface ProjectFiltersProps {
     owner: string;
     priority: string;
     complexity: string;
+    impactFinancial: string;
+    impactTime: string;
     search: string;
     startDate: string;
     endDate: string;
@@ -19,6 +21,14 @@ interface ProjectFiltersProps {
 export default function ProjectFilters({ filters, onChange, onApply }: ProjectFiltersProps) {
   const hasFilters = Object.values(filters).some(Boolean);
 
+  const clearAll = () => {
+    const empty = {
+      status: '', owner: '', priority: '', complexity: '',
+      impactFinancial: '', impactTime: '', search: '', startDate: '', endDate: '',
+    };
+    Object.entries(empty).forEach(([k, v]) => onChange(k, v));
+  };
+
   return (
     <div className="iveco-card p-5">
       <div className="mb-4 flex items-center justify-between">
@@ -26,10 +36,7 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
         {hasFilters && (
           <button
             type="button"
-            onClick={() => {
-              const empty = { status: '', owner: '', priority: '', complexity: '', search: '', startDate: '', endDate: '' };
-              Object.entries(empty).forEach(([k, v]) => onChange(k, v));
-            }}
+            onClick={clearAll}
             className="text-xs text-[#555562] transition-colors hover:text-white"
           >
             Limpar filtros
@@ -91,6 +98,34 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
         </div>
 
         <div>
+          <label className="iveco-label mb-1.5 block">Impacto Financeiro</label>
+          <select
+            value={filters.impactFinancial}
+            onChange={(e) => onChange('impactFinancial', e.target.value)}
+            className="iveco-input"
+          >
+            <option value="">Todos</option>
+            {Object.entries(impactFinancialLabels).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="iveco-label mb-1.5 block">Prazo de Impacto</label>
+          <select
+            value={filters.impactTime}
+            onChange={(e) => onChange('impactTime', e.target.value)}
+            className="iveco-input"
+          >
+            <option value="">Todos</option>
+            {Object.entries(impactTimeLabels).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
           <label className="iveco-label mb-1.5 block">Responsável</label>
           <input
             value={filters.owner}
@@ -120,7 +155,7 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
           />
         </div>
 
-        <div className="flex items-end sm:col-span-2">
+        <div className="flex items-end sm:col-span-2 lg:col-span-3">
           <button
             type="button"
             onClick={onApply}

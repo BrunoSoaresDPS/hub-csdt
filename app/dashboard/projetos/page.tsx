@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Topbar from '../../components/Topbar';
-import OverviewDashboard from '../../components/OverviewDashboard';
+import Topbar from '../../../components/Topbar';
+import DashboardShell from '../../../components/DashboardShell';
 
 interface User {
   id: string;
@@ -13,7 +13,7 @@ interface User {
 
 export const dynamic = 'force-dynamic';
 
-export default function DashboardPage() {
+export default function ProjetosPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,11 +57,11 @@ export default function DashboardPage() {
     <div className="min-h-dvh">
       <Topbar
         title={`Olá, ${user.name}`}
-        activeRoute="overview"
+        activeRoute="projects"
       />
       <main className="px-6 pb-12 sm:px-8">
         <div className="mx-auto max-w-7xl">
-          <OverviewDashboard />
+          <DashboardShell />
         </div>
       </main>
     </div>
