@@ -32,10 +32,12 @@ interface Project {
 }
 
 const COLUMNS = [
-  { id: 'REVIEW', label: 'Em Revisão', color: 'border-amber-500', dot: 'bg-amber-400' },
+  { id: 'REVIEW', label: 'Em Análise', color: 'border-amber-500', dot: 'bg-amber-400' },
+  { id: 'VALIDATION', label: 'Em Validação', color: 'border-violet-500', dot: 'bg-violet-400' },
   { id: 'APPROVED', label: 'Aprovado', color: 'border-emerald-500', dot: 'bg-emerald-400' },
   { id: 'IN_PROGRESS', label: 'Em Andamento', color: 'border-[#1654FF]', dot: 'bg-[#1654FF]' },
   { id: 'COMPLETED', label: 'Concluído', color: 'border-slate-500', dot: 'bg-slate-400' },
+  { id: 'OUT_OF_SCOPE', label: 'Fora de Escopo', color: 'border-rose-500', dot: 'bg-rose-400' },
 ];
 
 const priorityDot: Record<string, string> = {
@@ -191,7 +193,7 @@ export default function KanbanBoard({ projects: initialProjects }: { projects: P
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {COLUMNS.map((col) => (
           <KanbanColumn key={col.id} column={col} projects={projectsByColumn[col.id]} />
         ))}

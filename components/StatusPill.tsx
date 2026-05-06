@@ -4,9 +4,11 @@ import { projectStatuses } from '../lib/validators';
 
 const colorMap: Record<string, string> = {
   REVIEW: 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-300',
+  VALIDATION: 'border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-300',
   APPROVED: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
   IN_PROGRESS: 'border-[#1654FF]/30 bg-[#1654FF]/10 text-[#1654FF] dark:text-[#7B9FFF]',
   COMPLETED: 'border-slate-500/30 bg-slate-500/10 text-slate-500 dark:text-slate-400',
+  OUT_OF_SCOPE: 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400',
 };
 
 export default function StatusPill({ value }: { value: string }) {

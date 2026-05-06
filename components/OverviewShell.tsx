@@ -21,7 +21,7 @@ interface Project {
 
 const PRIORITY_SCORE: Record<string, number> = { HIGH: 3, MEDIUM: 2, LOW: 1 };
 const COMPLEXITY_SCORE: Record<string, number> = { LOW: 3, MEDIUM: 2, HIGH: 1 };
-const STATUS_SCORE: Record<string, number> = { APPROVED: 3, REVIEW: 2, IN_PROGRESS: 1, COMPLETED: 0 };
+const STATUS_SCORE: Record<string, number> = { APPROVED: 3, VALIDATION: 3, REVIEW: 2, IN_PROGRESS: 1, COMPLETED: 0, OUT_OF_SCOPE: 0 };
 const IMPACT_SCORE: Record<string, number> = { HIGH: 3, MEDIUM: 2, LOW: 1 };
 
 function scoreProject(p: Project): number {
@@ -93,7 +93,7 @@ export default function OverviewShell() {
 
   const attackProjects = useMemo(() => {
     return projects
-      .filter((p) => p.status === 'REVIEW' || p.status === 'APPROVED')
+      .filter((p) => p.status === 'REVIEW' || p.status === 'VALIDATION' || p.status === 'APPROVED')
       .map((p) => ({ ...p, score: scoreProject(p) }))
       .filter((p) => p.score >= 6)
       .sort((a, b) => b.score - a.score)
@@ -127,12 +127,14 @@ export default function OverviewShell() {
       {/* Stat cards */}
       <div>
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Visão Geral</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
           <StatCard label="Total" value={projects.length} sub="projetos registrados" />
-          <StatCard label="Em Revisão" value={stats.byStatus['REVIEW'] ?? 0} accent="text-amber-500" />
+          <StatCard label="Em Análise" value={stats.byStatus['REVIEW'] ?? 0} accent="text-amber-500" />
+          <StatCard label="Em Validação" value={stats.byStatus['VALIDATION'] ?? 0} accent="text-violet-500" />
           <StatCard label="Aprovados" value={stats.byStatus['APPROVED'] ?? 0} accent="text-emerald-500" />
           <StatCard label="Em Andamento" value={stats.byStatus['IN_PROGRESS'] ?? 0} accent="text-[#1654FF]" />
           <StatCard label="Concluídos" value={stats.byStatus['COMPLETED'] ?? 0} accent="text-slate-500" />
+          <StatCard label="Fora de Escopo" value={stats.byStatus['OUT_OF_SCOPE'] ?? 0} accent="text-rose-500" />
           <StatCard label="Alta Prioridade" value={stats.byPriority['HIGH'] ?? 0} accent="text-rose-500" />
         </div>
       </div>

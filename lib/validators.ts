@@ -1,8 +1,10 @@
 export const projectStatuses = {
   REVIEW: 'Em análise',
+  VALIDATION: 'Em validação',
   APPROVED: 'Aprovado',
   IN_PROGRESS: 'Em andamento',
   COMPLETED: 'Concluído',
+  OUT_OF_SCOPE: 'Fora de escopo',
 } as const;
 
 export const priorityLabels = {

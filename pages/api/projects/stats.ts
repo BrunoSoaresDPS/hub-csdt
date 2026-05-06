@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     orderBy: { createdAt: 'desc' },
   });
 
-  const byStatus: Record<string, number> = { REVIEW: 0, APPROVED: 0, IN_PROGRESS: 0, COMPLETED: 0 };
+  const byStatus: Record<string, number> = { REVIEW: 0, VALIDATION: 0, APPROVED: 0, IN_PROGRESS: 0, COMPLETED: 0, OUT_OF_SCOPE: 0 };
   const byPriority: Record<string, number> = { LOW: 0, MEDIUM: 0, HIGH: 0 };
   const byComplexity: Record<string, number> = { LOW: 0, MEDIUM: 0, HIGH: 0 };
   const byCategory: Record<string, number> = {};
