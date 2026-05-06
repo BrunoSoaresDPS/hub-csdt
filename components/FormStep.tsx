@@ -22,10 +22,10 @@ export default function FormStep({
   isLast = false,
 }: FormStepProps) {
   return (
-    <div className="min-h-dvh flex flex-col bg-gradient-to-br from-[#080808] via-[#0f0f11] to-[#080808] animate-fade-in">
+    <div className="min-h-dvh flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-[#080808] dark:via-[#0f0f11] dark:to-[#080808] animate-fade-in">
       {/* Progress bar */}
       {progress && (
-        <div className="h-1 bg-[#17171b]">
+        <div className="h-1 bg-gray-200 dark:bg-[#17171b]">
           <div
             className="h-full bg-[#1654FF] transition-all duration-300"
             style={{ width: `${(progress.current / progress.total) * 100}%` }}
@@ -38,15 +38,15 @@ export default function FormStep({
           {/* Step info */}
           <div className="mb-8 text-center">
             {progress && (
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#555562] mb-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-400 dark:text-[#555562] mb-2">
                 Passo {progress.current} de {progress.total}
               </p>
             )}
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3 leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-3 leading-tight">
               {title}
             </h2>
             {description && (
-              <p className="text-base text-[#9999a8] leading-relaxed max-w-xl mx-auto">
+              <p className="text-base text-gray-500 dark:text-[#9999a8] leading-relaxed max-w-xl mx-auto">
                 {description}
               </p>
             )}

@@ -46,7 +46,7 @@ export default function CategorySelector({
               className={`group relative rounded-lg border-2 p-4 text-left transition-all ${
                 isSelected
                   ? 'border-[#1654FF] bg-[#1654FF]/10'
-                  : 'border-[#232329] bg-[#17171b] hover:border-[#3a3a46]'
+                  : 'border-gray-200 bg-gray-50 hover:border-gray-300 dark:border-[#232329] dark:bg-[#17171b] dark:hover:border-[#3a3a46]'
               }`}
             >
               {/* Checkmark */}
@@ -63,8 +63,8 @@ export default function CategorySelector({
               )}
 
               <span className="text-2xl mb-2 block">{config.icon}</span>
-              <p className="font-semibold text-white mb-1">{key}</p>
-              <p className="text-xs text-[#9999a8] leading-relaxed">{config.description}</p>
+              <p className="font-semibold text-gray-900 dark:text-white mb-1">{key}</p>
+              <p className="text-xs text-gray-500 dark:text-[#9999a8] leading-relaxed">{config.description}</p>
             </button>
           );
         })}

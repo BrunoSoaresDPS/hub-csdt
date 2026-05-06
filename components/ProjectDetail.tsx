@@ -30,9 +30,9 @@ const priorityDot: Record<string, string> = {
 };
 
 const complexityBadge: Record<string, string> = {
-  HIGH: 'border-rose-500/30 bg-rose-500/10 text-rose-300',
+  HIGH: 'border-rose-500/30 bg-rose-500/10 text-rose-500 dark:text-rose-300',
   MEDIUM: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-  LOW: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+  LOW: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
 };
 
 export default function ProjectDetail({ id }: { id: string }) {
@@ -124,7 +124,7 @@ export default function ProjectDetail({ id }: { id: string }) {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
-          <p className="text-sm text-[#555562]">Carregando projeto...</p>
+          <p className="text-sm text-gray-400 dark:text-[#555562]">Carregando projeto...</p>
         </div>
       </div>
     );
@@ -140,7 +140,7 @@ export default function ProjectDetail({ id }: { id: string }) {
               <StatusPill value={project.status} />
               <div className="flex items-center gap-1.5">
                 <div className={`h-1.5 w-1.5 rounded-full ${priorityDot[project.priority] ?? 'bg-slate-500'}`} />
-                <span className="text-xs text-[#9999a8]">
+                <span className="text-xs text-gray-500 dark:text-[#9999a8]">
                   Prioridade {priorityLabels[project.priority as keyof typeof priorityLabels] ?? project.priority}
                 </span>
               </div>
@@ -160,15 +160,15 @@ export default function ProjectDetail({ id }: { id: string }) {
                 Complexidade {complexityLabels[project.complexity as keyof typeof complexityLabels] ?? project.complexity}
               </span>
             </div>
-            <h2 className="text-2xl font-bold text-white">{project.title}</h2>
-            <p className="max-w-2xl text-sm text-[#9999a8] leading-relaxed">{project.description}</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{project.title}</h2>
+            <p className="max-w-2xl text-sm text-gray-500 dark:text-[#9999a8] leading-relaxed">{project.description}</p>
           </div>
           {project.fileUrl && (
             <a
               href={project.fileUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-[#232329] bg-[#17171b] px-3 py-2 text-xs font-medium text-[#9999a8] transition-colors hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 dark:border-[#232329] dark:bg-[#17171b] px-3 py-2 text-xs font-medium text-gray-500 dark:text-[#9999a8] transition-colors hover:text-gray-900 dark:text-white"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -198,9 +198,9 @@ export default function ProjectDetail({ id }: { id: string }) {
               value: impactTimeLabels[project.impactTime as keyof typeof impactTimeLabels],
             },
           ].filter(Boolean).map((item: any) => (
-            <div key={item.label} className="rounded-lg border border-[#232329] bg-[#17171b] px-4 py-3">
+            <div key={item.label} className="rounded-lg border border-gray-200 bg-gray-50 dark:border-[#232329] dark:bg-[#17171b] px-4 py-3">
               <p className="iveco-label">{item.label}</p>
-              <p className="mt-1 text-sm font-semibold text-white">{item.value}</p>
+              <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{item.value}</p>
             </div>
           ))}
         </div>
@@ -214,8 +214,8 @@ export default function ProjectDetail({ id }: { id: string }) {
                   <p className="iveco-label mb-3">Informações Adicionais</p>
                   <ul className="space-y-2">
                     {Object.entries(answers).map(([key, value]) => (
-                      <li key={key} className="text-sm text-[#9999a8]">
-                        <span className="text-white font-medium capitalize">{key.replace(/_/g, ' ')}:</span> {String(value)}
+                      <li key={key} className="text-sm text-gray-500 dark:text-[#9999a8]">
+                        <span className="text-gray-900 dark:text-white font-medium capitalize">{key.replace(/_/g, ' ')}:</span> {String(value)}
                       </li>
                     ))}
                   </ul>
@@ -231,9 +231,9 @@ export default function ProjectDetail({ id }: { id: string }) {
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
         {/* Update form */}
         <form onSubmit={handleUpdate} className="iveco-card p-6 space-y-4">
-          <div className="border-b border-[#232329] pb-4">
-            <h3 className="text-base font-bold text-white">Atualizar projeto</h3>
-            <p className="mt-0.5 text-sm text-[#555562]">Altere o status, prioridade ou registre uma nota.</p>
+          <div className="border-b border-gray-200 dark:border-[#232329] pb-4">
+            <h3 className="text-base font-bold text-gray-900 dark:text-white">Atualizar projeto</h3>
+            <p className="mt-0.5 text-sm text-gray-400 dark:text-[#555562]">Altere o status, prioridade ou registre uma nota.</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -278,8 +278,8 @@ export default function ProjectDetail({ id }: { id: string }) {
             <div
               className={`rounded-lg border px-4 py-3 text-sm ${
                 message.success
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
-                  : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                  : 'border-rose-500/30 bg-rose-500/10 text-rose-500 dark:text-rose-300'
               }`}
             >
               {message.text}
@@ -309,9 +309,9 @@ export default function ProjectDetail({ id }: { id: string }) {
         <div className="space-y-4">
           {/* Add comment */}
           <div className="iveco-card p-5">
-            <div className="mb-4 border-b border-[#232329] pb-4">
-              <h3 className="text-base font-bold text-white">Adicionar comentário</h3>
-              <p className="mt-0.5 text-xs text-[#555562]">Registre observações sem alterar o status do projeto.</p>
+            <div className="mb-4 border-b border-gray-200 dark:border-[#232329] pb-4">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">Adicionar comentário</h3>
+              <p className="mt-0.5 text-xs text-gray-400 dark:text-[#555562]">Registre observações sem alterar o status do projeto.</p>
             </div>
             <textarea
               value={comment}
@@ -323,8 +323,8 @@ export default function ProjectDetail({ id }: { id: string }) {
             {commentMessage.text && (
               <div className={`mb-3 rounded-lg border px-3 py-2 text-sm ${
                 commentMessage.success
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
-                  : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                  : 'border-rose-500/30 bg-rose-500/10 text-rose-500 dark:text-rose-300'
               }`}>
                 {commentMessage.text}
               </div>
@@ -341,18 +341,18 @@ export default function ProjectDetail({ id }: { id: string }) {
 
           {/* Change log */}
           <div className="iveco-card p-5">
-            <div className="mb-4 border-b border-[#232329] pb-4">
-              <h3 className="text-base font-bold text-white">Histórico</h3>
-              <p className="mt-0.5 text-xs text-[#555562]">{project.changeLogs.length} registro{project.changeLogs.length !== 1 ? 's' : ''}</p>
+            <div className="mb-4 border-b border-gray-200 dark:border-[#232329] pb-4">
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">Histórico</h3>
+              <p className="mt-0.5 text-xs text-gray-400 dark:text-[#555562]">{project.changeLogs.length} registro{project.changeLogs.length !== 1 ? 's' : ''}</p>
             </div>
             <div className="space-y-3 overflow-y-auto max-h-80">
               {project.changeLogs.length === 0 ? (
-                <p className="text-sm text-[#555562]">Sem registros.</p>
+                <p className="text-sm text-gray-400 dark:text-[#555562]">Sem registros.</p>
               ) : (
                 project.changeLogs.map((log) => (
-                  <div key={log.id} className="rounded-lg border border-[#232329] bg-[#17171b] p-3">
-                    <p className="text-xs text-[#9999a8] leading-relaxed">{log.message}</p>
-                    <p className="mt-2 text-[10px] text-[#333340]">
+                  <div key={log.id} className="rounded-lg border border-gray-200 bg-gray-50 dark:border-[#232329] dark:bg-[#17171b] p-3">
+                    <p className="text-xs text-gray-500 dark:text-[#9999a8] leading-relaxed">{log.message}</p>
+                    <p className="mt-2 text-[10px] text-gray-300 dark:text-[#333340]">
                       {new Date(log.createdAt).toLocaleString('pt-BR')}
                     </p>
                   </div>

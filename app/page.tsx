@@ -11,7 +11,7 @@ export default function HomePage() {
   if (showForm) {
     return (
       <div className="min-h-dvh flex flex-col">
-        <header className="border-b border-[#1a1a1e] bg-[#080808]">
+        <header className="border-b border-gray-200 bg-white dark:border-[#1a1a1e] dark:bg-[#080808]">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
             <button
               onClick={() => setShowForm(false)}
@@ -41,9 +41,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col bg-gradient-to-b from-[#080808] via-[#0f0f11] to-[#080808]">
+    <div className="min-h-dvh flex flex-col bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-[#080808] dark:via-[#0f0f11] dark:to-[#080808]">
       {/* Header */}
-      <header className="border-b border-[#1a1a1e] bg-[#080808]">
+      <header className="border-b border-gray-200 bg-white dark:border-[#1a1a1e] dark:bg-[#080808]">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <IvecoLogo size="md" showTagline />
           <Link
@@ -69,10 +69,10 @@ export default function HomePage() {
               <div className="space-y-8 animate-fade-in">
                 <div className="space-y-4">
                   <p className="iveco-label text-[#1654FF]">Hub de Inovação Corporativa</p>
-                  <h1 className="text-4xl font-black leading-[1.2] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                  <h1 className="text-4xl font-black leading-[1.2] tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
                     Centralize suas demandas de <span className="text-[#1654FF]">tecnologia e inovação</span>
                   </h1>
-                  <p className="text-lg text-[#e8e8ec] leading-relaxed max-w-lg">
+                  <p className="text-lg text-gray-600 dark:text-[#e8e8ec] leading-relaxed max-w-lg">
                     Submeta projetos de automação, inteligência artificial, dashboards e plataformas digitais. Nossa equipe CSDT avalia, prioriza e transforma suas demandas em soluções corporativas de alto impacto.
                   </p>
                 </div>
@@ -145,14 +145,14 @@ export default function HomePage() {
                   ].map((cat) => (
                     <div
                       key={cat.name}
-                      className="iveco-card p-4 hover:border-[#1654FF]/50 transition-all group cursor-pointer"
+                      className="iveco-card p-4 cursor-pointer transition-all group hover:border-[#1654FF]/50"
                     >
                       <div className="flex gap-3">
                         <span className="text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">{cat.icon}</span>
                         <div className="flex-1">
-                          <p className="font-bold text-white">{cat.name}</p>
-                          <p className="text-sm text-[#e8e8ec] mt-1">{cat.desc}</p>
-                          <p className="text-xs text-[#c8c8d0] mt-2 leading-relaxed">{cat.examples}</p>
+                          <p className="font-bold text-gray-900 dark:text-white">{cat.name}</p>
+                          <p className="text-sm text-gray-600 dark:text-[#e8e8ec] mt-1">{cat.desc}</p>
+                          <p className="text-xs text-gray-500 dark:text-[#c8c8d0] mt-2 leading-relaxed">{cat.examples}</p>
                         </div>
                       </div>
                     </div>
@@ -164,9 +164,9 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-[#232329] bg-[#080808] px-6 py-8">
+        <footer className="border-t border-gray-200 bg-white px-6 py-8 dark:border-[#232329] dark:bg-[#080808]">
           <div className="mx-auto max-w-7xl text-center">
-            <p className="text-sm text-[#c8c8d0]">
+            <p className="text-sm text-gray-500 dark:text-[#c8c8d0]">
               © {new Date().getFullYear()} IVECO Hub CSDT. Todos os direitos reservados.
             </p>
           </div>

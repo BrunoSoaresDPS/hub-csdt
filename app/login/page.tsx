@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import IvecoLogo from '../../components/IvecoLogo';
+import ThemeToggle from '../../components/ThemeToggle';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,27 +31,28 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* Blue top line */}
       <div className="h-[3px] bg-[#1654FF]" />
+
+      <div className="absolute right-4 top-6">
+        <ThemeToggle />
+      </div>
 
       <div className="flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm animate-fade-in">
 
-          {/* Logo */}
           <div className="mb-10 text-center">
             <div className="mb-3 flex justify-center">
               <IvecoLogo size="lg" />
             </div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#555562]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-[#555562]">
               Hub CSDT · Área Administrativa
             </p>
           </div>
 
-          {/* Card */}
           <div className="iveco-card overflow-hidden">
-            <div className="border-b border-[#232329] px-6 py-5">
-              <h1 className="text-lg font-bold text-white">Acesso ao painel</h1>
-              <p className="mt-1 text-sm text-[#555562]">
+            <div className="border-b border-gray-200 px-6 py-5 dark:border-[#232329]">
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Acesso ao painel</h1>
+              <p className="mt-1 text-sm text-gray-400 dark:text-[#555562]">
                 Entre com suas credenciais para gerenciar os projetos.
               </p>
             </div>
@@ -105,8 +107,8 @@ export default function LoginPage() {
                   <div
                     className={`mt-3 rounded-lg border px-4 py-3 text-sm ${
                       status.error
-                        ? 'border-rose-500/30 bg-rose-500/10 text-rose-300'
-                        : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                        ? 'border-rose-500/30 bg-rose-500/10 text-rose-500 dark:text-rose-300'
+                        : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
                     }`}
                   >
                     {status.message}
@@ -116,7 +118,7 @@ export default function LoginPage() {
             </form>
           </div>
 
-          <p className="mt-6 text-center text-xs text-[#333340]">
+          <p className="mt-6 text-center text-xs text-gray-400 dark:text-[#333340]">
             © {new Date().getFullYear()} IVECO Hub CSDT
           </p>
         </div>

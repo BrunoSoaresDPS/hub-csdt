@@ -30,7 +30,7 @@ export default function ProjectFilters({ filters, onChange, onApply }: ProjectFi
               const empty = { status: '', owner: '', priority: '', complexity: '', search: '', startDate: '', endDate: '' };
               Object.entries(empty).forEach(([k, v]) => onChange(k, v));
             }}
-            className="text-xs text-[#555562] transition-colors hover:text-white"
+            className="text-xs text-gray-400 transition-colors hover:text-gray-700 dark:text-[#555562] dark:hover:text-white"
           >
             Limpar filtros
           </button>

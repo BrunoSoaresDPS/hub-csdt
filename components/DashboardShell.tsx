@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import ProjectFilters from './ProjectFilters';
 import ProjectTable from './ProjectTable';
+import KanbanBoard from './KanbanBoard';
 
 interface Project {
   id: string;
@@ -18,6 +19,7 @@ interface Project {
 }
 
 const PAGE_SIZE = 10;
+type ViewMode = 'list' | 'kanban';
 
 export default function DashboardShell() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -25,6 +27,7 @@ export default function DashboardShell() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [page, setPage] = useState(1);
+  const [view, setView] = useState<ViewMode>('list');
   const [filters, setFilters] = useState({
     status: '',
     owner: '',
@@ -40,10 +43,14 @@ export default function DashboardShell() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) params.set(key, value);
     });
-    params.set('page', String(page));
-    params.set('pageSize', String(PAGE_SIZE));
+    if (view === 'list') {
+      params.set('page', String(page));
+      params.set('pageSize', String(PAGE_SIZE));
+    } else {
+      params.set('pageSize', '500');
+    }
     return params.toString();
-  }, [filters, page]);
+  }, [filters, page, view]);
 
   useEffect(() => {
     async function loadProjects() {
@@ -75,10 +82,40 @@ export default function DashboardShell() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white">Projetos</h2>
-          <p className="mt-0.5 text-sm text-[#555562]">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Projetos</h2>
+          <p className="mt-0.5 text-sm text-gray-400 dark:text-[#555562]">
             {total > 0 ? `${total} projeto${total !== 1 ? 's' : ''} registrado${total !== 1 ? 's' : ''}` : 'Nenhum projeto encontrado'}
           </p>
+        </div>
+
+        {/* View toggle */}
+        <div className="flex rounded-lg border border-gray-200 p-0.5 dark:border-[#232329]">
+          <button
+            onClick={() => setView('list')}
+            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
+              view === 'list'
+                ? 'bg-[#1654FF] text-white'
+                : 'text-gray-500 hover:text-gray-700 dark:text-[#555562] dark:hover:text-[#9999a8]'
+            }`}
+          >
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+            Lista
+          </button>
+          <button
+            onClick={() => setView('kanban')}
+            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
+              view === 'kanban'
+                ? 'bg-[#1654FF] text-white'
+                : 'text-gray-500 hover:text-gray-700 dark:text-[#555562] dark:hover:text-[#9999a8]'
+            }`}
+          >
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+            </svg>
+            Kanban
+          </button>
         </div>
       </div>
 
@@ -88,13 +125,11 @@ export default function DashboardShell() {
           setPage(1);
           setFilters((prev) => ({ ...prev, [field]: value }));
         }}
-        onApply={() => {
-          setPage(1);
-        }}
+        onApply={() => setPage(1)}
       />
 
       {error && (
-        <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+        <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-500 dark:text-rose-300">
           {error}
         </div>
       )}
@@ -106,23 +141,25 @@ export default function DashboardShell() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
             </svg>
-            <p className="text-sm text-[#555562]">Carregando projetos...</p>
+            <p className="text-sm text-gray-400 dark:text-[#555562]">Carregando projetos...</p>
           </div>
         </div>
+      ) : view === 'kanban' ? (
+        <KanbanBoard projects={projects} />
       ) : (
         <ProjectTable projects={projects} />
       )}
 
-      {totalPages > 1 && (
+      {view === 'list' && totalPages > 1 && (
         <div className="flex items-center justify-between pt-2">
-          <p className="text-sm text-[#555562]">
+          <p className="text-sm text-gray-400 dark:text-[#555562]">
             Página {page} de {totalPages}
           </p>
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#232329] bg-[#17171b] px-3 py-1.5 text-sm font-medium text-[#d4d4d8] transition-colors hover:border-[#1654FF]/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:border-[#1654FF]/50 hover:text-[#1654FF] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#232329] dark:bg-[#17171b] dark:text-[#d4d4d8] dark:hover:text-white"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -145,15 +182,15 @@ export default function DashboardShell() {
               }
               return pages.map((p, i) =>
                 p === '...' ? (
-                  <span key={`ellipsis-${i}`} className="px-1 text-sm text-[#555562]">…</span>
+                  <span key={`ellipsis-${i}`} className="px-1 text-sm text-gray-400 dark:text-[#555562]">…</span>
                 ) : (
                   <button
                     key={p}
                     onClick={() => setPage(p)}
                     className={`min-w-[32px] rounded-lg border px-2 py-1.5 text-sm font-medium transition-colors ${
                       page === p
-                        ? 'border-[#1654FF] bg-[#1654FF]/15 text-white'
-                        : 'border-[#232329] bg-[#17171b] text-[#d4d4d8] hover:border-[#1654FF]/50 hover:text-white'
+                        ? 'border-[#1654FF] bg-[#1654FF]/15 text-[#1654FF] dark:text-white'
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-[#1654FF]/50 hover:text-[#1654FF] dark:border-[#232329] dark:bg-[#17171b] dark:text-[#d4d4d8] dark:hover:text-white'
                     }`}
                   >
                     {p}
@@ -165,7 +202,7 @@ export default function DashboardShell() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#232329] bg-[#17171b] px-3 py-1.5 text-sm font-medium text-[#d4d4d8] transition-colors hover:border-[#1654FF]/50 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:border-[#1654FF]/50 hover:text-[#1654FF] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#232329] dark:bg-[#17171b] dark:text-[#d4d4d8] dark:hover:text-white"
             >
               Próxima
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
