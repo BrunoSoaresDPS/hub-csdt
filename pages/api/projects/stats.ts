@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { authenticateRequest, sendUnauthorized } from '../_helpers';
+import { authenticateRequest, sendUnauthorized } from '../../../lib/api-helpers';
 import { prisma } from '../../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
