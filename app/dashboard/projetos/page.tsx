@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Topbar from '../../components/Topbar';
-import OverviewShell from '../../components/OverviewShell';
+import Topbar from '../../../components/Topbar';
+import DashboardShell from '../../../components/DashboardShell';
 
 interface User {
   id: string;
@@ -13,7 +13,7 @@ interface User {
 
 export const dynamic = 'force-dynamic';
 
-export default function DashboardPage() {
+export default function ProjetosPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ export default function DashboardPage() {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
-          <p className="text-sm text-gray-400 dark:text-[#555562]">Verificando acesso...</p>
+          <p className="text-sm text-[#555562]">Verificando acesso...</p>
         </div>
       </div>
     );
@@ -55,10 +55,13 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-dvh">
-      <Topbar title={`Olá, ${user.name}`} activeRoute="overview" />
+      <Topbar
+        title={`Olá, ${user.name}`}
+        activeRoute="projects"
+      />
       <main className="px-6 pb-12 sm:px-8">
         <div className="mx-auto max-w-7xl">
-          <OverviewShell />
+          <DashboardShell />
         </div>
       </main>
     </div>

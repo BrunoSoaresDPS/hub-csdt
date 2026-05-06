@@ -5,6 +5,18 @@ import { useRouter } from 'next/navigation';
 import StatusPill from './StatusPill';
 import { projectStatuses, priorityLabels, complexityLabels, impactFinancialLabels, impactTimeLabels } from '../lib/validators';
 
+const impactFinancialMeta: Record<string, { color: string; icon: string; description: string }> = {
+  LOW:    { color: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300', icon: '↓', description: 'Necessidade pontual, sem grande impacto financeiro.' },
+  MEDIUM: { color: 'border-amber-500/30 bg-amber-500/10 text-amber-300',     icon: '→', description: 'Melhoria relevante com economia ou receita perceptível.' },
+  HIGH:   { color: 'border-rose-500/30 bg-rose-500/10 text-rose-300',         icon: '↑', description: 'Potencial de transformar resultados financeiros.' },
+};
+
+const impactTimeMeta: Record<string, { color: string; icon: string; description: string }> = {
+  SHORT:  { color: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300', icon: '⚡', description: 'Menos de 3 meses. Entrega rápida.' },
+  MEDIUM: { color: 'border-amber-500/30 bg-amber-500/10 text-amber-300',       icon: '⏱', description: 'Entre 3 e 6 meses. Porte médio.' },
+  LONG:   { color: 'border-rose-500/30 bg-rose-500/10 text-rose-300',          icon: '📅', description: 'Mais de 6 meses. Projeto complexo.' },
+};
+
 interface TaskProject {
   id: string;
   title: string;
@@ -227,6 +239,48 @@ export default function ProjectDetail({ id }: { id: string }) {
           }
         })()}
       </div>
+
+      {/* Impacto Operacional */}
+      {(project.impactFinancial || project.impactTime) && (
+        <div className="iveco-card p-6">
+          <div className="mb-4 border-b border-[#232329] pb-4 flex items-center gap-2">
+            <svg className="h-4 w-4 text-[#1654FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <h3 className="text-base font-bold text-white">Impacto Operacional</h3>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {project.impactFinancial && (() => {
+              const meta = impactFinancialMeta[project.impactFinancial!];
+              const label = impactFinancialLabels[project.impactFinancial as keyof typeof impactFinancialLabels];
+              return (
+                <div className={`rounded-xl border-2 p-4 ${meta.color}`}>
+                  <p className="text-xs font-semibold uppercase tracking-wider opacity-70 mb-2">Impacto Financeiro</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xl font-bold">{meta.icon}</span>
+                    <span className="text-lg font-bold">{label}</span>
+                  </div>
+                  <p className="text-xs opacity-75 leading-relaxed">{meta.description}</p>
+                </div>
+              );
+            })()}
+            {project.impactTime && (() => {
+              const meta = impactTimeMeta[project.impactTime!];
+              const label = impactTimeLabels[project.impactTime as keyof typeof impactTimeLabels];
+              return (
+                <div className={`rounded-xl border-2 p-4 ${meta.color}`}>
+                  <p className="text-xs font-semibold uppercase tracking-wider opacity-70 mb-2">Prazo Esperado</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xl">{meta.icon}</span>
+                    <span className="text-lg font-bold">{label}</span>
+                  </div>
+                  <p className="text-xs opacity-75 leading-relaxed">{meta.description}</p>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
         {/* Update form */}
