@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   DndContext,
@@ -17,6 +17,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import StatusPill from './StatusPill';
 import { priorityLabels, complexityLabels } from '../lib/validators';
+import { canTransition, transitionErrorMessage } from '../lib/workflow';
 
 interface Project {
   id: string;
@@ -149,6 +150,18 @@ function KanbanColumn({
 export default function KanbanBoard({ projects: initialProjects }: { projects: Project[] }) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [moveError, setMoveError] = useState('');
+  const errorTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (errorTimer.current) clearTimeout(errorTimer.current);
+  }, []);
+
+  const showMoveError = (message: string) => {
+    setMoveError(message);
+    if (errorTimer.current) clearTimeout(errorTimer.current);
+    errorTimer.current = setTimeout(() => setMoveError(''), 5000);
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -174,25 +187,44 @@ export default function KanbanBoard({ projects: initialProjects }: { projects: P
     if (!project || project.status === newStatus) return;
     if (!COLUMNS.find((c) => c.id === newStatus)) return;
 
+    if (!canTransition(project.status, newStatus)) {
+      showMoveError(transitionErrorMessage(project.status, newStatus));
+      return;
+    }
+
     setProjects((prev) =>
       prev.map((p) => (p.id === project.id ? { ...p, status: newStatus } : p))
     );
 
+    const revert = () =>
+      setProjects((prev) =>
+        prev.map((p) => (p.id === project.id ? { ...p, status: project.status } : p))
+      );
+
     try {
-      await fetch(`/api/projects/${project.id}`, {
+      const res = await fetch(`/api/projects/${project.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        showMoveError(data?.error || 'Não foi possível mover o projeto.');
+        revert();
+      }
     } catch {
-      setProjects((prev) =>
-        prev.map((p) => (p.id === project.id ? { ...p, status: project.status } : p))
-      );
+      showMoveError('Erro de conexão ao mover o projeto.');
+      revert();
     }
   };
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      {moveError && (
+        <div className="mb-4 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-500 dark:text-rose-300">
+          {moveError}
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {COLUMNS.map((col) => (
           <KanbanColumn key={col.id} column={col} projects={projectsByColumn[col.id]} />
