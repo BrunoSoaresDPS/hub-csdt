@@ -1,35 +1,70 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { authenticateRequest, sendUnauthorized } from '../../../lib/api-helpers';
 import { prisma } from '../../../lib/prisma';
-import { validateProjectPayload, sanitizeInput } from '../../../lib/validators';
+import {
+  validateProjectPayload,
+  sanitizeInput,
+  isValidStatus,
+  isValidPriority,
+  isValidComplexity,
+  isValidImpactFinancial,
+  isValidImpactTime,
+  FIELD_LIMITS,
+} from '../../../lib/validators';
+
+const MAX_PAGE_SIZE = 100;
+
+function firstValue(value: string | string[] | undefined): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  return value;
+}
+
+function parseDateParam(value: string | undefined): Date | undefined {
+  if (!value) return undefined;
+  const parsed = Date.parse(value);
+  return isNaN(parsed) ? undefined : new Date(parsed);
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = await authenticateRequest(req, res);
   if (!user) return sendUnauthorized(res);
 
   if (req.method === 'GET') {
-    const { status, owner, priority, complexity, impactFinancial, impactTime, search, startDate, endDate, page = '1', pageSize = '10' } = req.query;
-    const pageNumber = Math.max(Number(page), 1);
-    const take = Math.max(Number(pageSize), 10);
+    const status = firstValue(req.query.status);
+    const owner = firstValue(req.query.owner);
+    const priority = firstValue(req.query.priority);
+    const complexity = firstValue(req.query.complexity);
+    const impactFinancial = firstValue(req.query.impactFinancial);
+    const impactTime = firstValue(req.query.impactTime);
+    const search = firstValue(req.query.search);
+    const startDate = parseDateParam(firstValue(req.query.startDate));
+    const endDate = parseDateParam(firstValue(req.query.endDate));
+
+    const pageNumber = Math.max(Number(firstValue(req.query.page)) || 1, 1);
+    const requestedSize = Number(firstValue(req.query.pageSize)) || 10;
+    const take = Math.min(Math.max(requestedSize, 1), MAX_PAGE_SIZE);
     const skip = (pageNumber - 1) * take;
 
+    // Filtros de enum só entram na query quando são valores válidos —
+    // um valor arbitrário faria o Prisma lançar erro (500) em runtime.
     const filters: any = {};
-    if (status) filters.status = status;
-    if (priority) filters.priority = priority;
-    if (complexity) filters.complexity = complexity;
-    if (impactFinancial) filters.impactFinancial = impactFinancial;
-    if (impactTime) filters.impactTime = impactTime;
-    if (owner) filters.owner = { contains: String(owner), mode: 'insensitive' };
+    if (isValidStatus(status)) filters.status = status;
+    if (isValidPriority(priority)) filters.priority = priority;
+    if (isValidComplexity(complexity)) filters.complexity = complexity;
+    if (isValidImpactFinancial(impactFinancial)) filters.impactFinancial = impactFinancial;
+    if (isValidImpactTime(impactTime)) filters.impactTime = impactTime;
+    if (owner) filters.owner = { contains: owner.slice(0, FIELD_LIMITS.owner), mode: 'insensitive' };
     if (search) {
+      const term = search.slice(0, FIELD_LIMITS.title);
       filters.OR = [
-        { title: { contains: String(search), mode: 'insensitive' } },
-        { description: { contains: String(search), mode: 'insensitive' } },
+        { title: { contains: term, mode: 'insensitive' } },
+        { description: { contains: term, mode: 'insensitive' } },
       ];
     }
     if (startDate || endDate) {
       filters.AND = [];
-      if (startDate) filters.AND.push({ startDate: { gte: new Date(String(startDate)) } });
-      if (endDate) filters.AND.push({ endDate: { lte: new Date(String(endDate)) } });
+      if (startDate) filters.AND.push({ startDate: { gte: startDate } });
+      if (endDate) filters.AND.push({ endDate: { lte: endDate } });
     }
 
     const [projects, total] = await Promise.all([
@@ -46,15 +81,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'POST') {
-    const data = req.body;
+    const data = req.body ?? {};
     const errors = validateProjectPayload(data);
     if (errors.length) return res.status(400).json({ error: errors.join(' ') });
 
     const project = await prisma.project.create({
       data: {
-        title: sanitizeInput(data.title),
-        description: sanitizeInput(data.description),
-        owner: sanitizeInput(data.owner),
+        title: sanitizeInput(data.title, FIELD_LIMITS.title),
+        description: sanitizeInput(data.description, FIELD_LIMITS.description),
+        owner: sanitizeInput(data.owner, FIELD_LIMITS.owner),
         categories: JSON.stringify(['Outros']),
         startDate: new Date(data.startDate),
         endDate: new Date(data.endDate),
