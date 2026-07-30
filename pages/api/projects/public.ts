@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 import { sanitizeInput, validatePublicFormPayload, FIELD_LIMITS } from '../../../lib/validators';
 import { assessComplexityForCategories, CATEGORY_CONFIG } from '../../../lib/formFlow';
+import { computePriorityFromImpacts } from '../../../lib/workflow';
 import { getClientIp, rateLimit } from '../../../lib/rate-limit';
 
 const MAX_SUBMISSIONS = 10;
@@ -46,6 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const today = new Date();
   const complexity = assessComplexityForCategories(categories);
+  const priority = computePriorityFromImpacts(impactFinancial, impactTime);
 
   try {
     const project = await prisma.project.create({
@@ -58,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         impactTime: impactTime || undefined,
         additionalQuestions: additionalAnswers ? JSON.stringify(additionalAnswers) : undefined,
         status: 'REVIEW',
-        priority: 'MEDIUM',
+        priority,
         complexity,
         startDate: today,
         endDate: today,

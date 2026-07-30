@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { authenticateRequest, sendUnauthorized } from '../../../lib/api-helpers';
 import { prisma } from '../../../lib/prisma';
 import { sanitizeInput, validateProjectUpdatePayload, FIELD_LIMITS } from '../../../lib/validators';
+import { canTransition, transitionErrorMessage } from '../../../lib/workflow';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = await authenticateRequest(req, res);
@@ -27,6 +28,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const project = await prisma.project.findUnique({ where: { id } });
     if (!project) return res.status(404).json({ error: 'Projeto não encontrado.' });
 
+    if (data.status && !canTransition(project.status, data.status)) {
+      return res.status(400).json({ error: transitionErrorMessage(project.status, data.status) });
+    }
+
     await prisma.project.update({
       where: { id },
       data: {
@@ -49,6 +54,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'DELETE') {
+    if (user.role !== 'admin') {
+      return res.status(403).json({ error: 'Apenas administradores podem excluir projetos.' });
+    }
+
     const project = await prisma.project.findUnique({ where: { id }, select: { id: true } });
     if (!project) return res.status(404).json({ error: 'Projeto não encontrado.' });
 

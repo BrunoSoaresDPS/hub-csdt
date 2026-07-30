@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import StatusPill from './StatusPill';
 import { projectStatuses, priorityLabels, complexityLabels, impactFinancialLabels, impactTimeLabels } from '../lib/validators';
+import { allowedNextStatuses } from '../lib/workflow';
 
 const impactFinancialMeta: Record<string, { color: string; icon: string; description: string }> = {
   LOW:    { color: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300', icon: '↓', description: 'Necessidade pontual, sem grande impacto financeiro.' },
@@ -88,6 +89,13 @@ export default function ProjectDetail({ id }: { id: string }) {
     setMessage({ text: 'Projeto atualizado com sucesso.', success: true });
     setForm((prev) => ({ ...prev, changeLog: '' }));
     router.refresh();
+    // Recarrega o projeto para que o seletor ofereça as transições do novo status
+    const updated = await fetch(`/api/projects/${id}`);
+    if (updated.ok) {
+      const refreshed = await updated.json();
+      setProject(refreshed.project);
+      setForm((prev) => ({ ...prev, status: refreshed.project.status, priority: refreshed.project.priority }));
+    }
   };
 
   const handleAddComment = async () => {
@@ -298,8 +306,10 @@ export default function ProjectDetail({ id }: { id: string }) {
                 onChange={(e) => setForm((prev) => ({ ...prev, status: e.target.value }))}
                 className="iveco-input"
               >
-                {Object.entries(projectStatuses).map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
+                {[project.status, ...allowedNextStatuses(project.status)].map((value) => (
+                  <option key={value} value={value}>
+                    {projectStatuses[value as keyof typeof projectStatuses] ?? value}
+                  </option>
                 ))}
               </select>
             </div>
