@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import IvecoLogo from './IvecoLogo';
 import ThemeToggle from './ThemeToggle';
 
@@ -18,13 +17,6 @@ const navLinks = [
 ];
 
 export default function Topbar({ title, activeRoute }: TopbarProps) {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/login');
-  };
-
   return (
     <header className="mb-8">
       <div className="h-[3px] bg-[#1654FF]" />
@@ -41,17 +33,10 @@ export default function Topbar({ title, activeRoute }: TopbarProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-[#232329] dark:bg-[#17171b] sm:flex">
-              <div className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span className="text-xs font-medium text-gray-500 dark:text-[#9999a8]">{title.replace('Olá, ', '')}</span>
-            </div>
+            <Link href="/" className="iveco-btn-ghost py-2 text-xs">
+              Formulário público
+            </Link>
             <ThemeToggle />
-            <button
-              onClick={handleLogout}
-              className="iveco-btn-ghost py-2 text-xs"
-            >
-              Sair
-            </button>
           </div>
         </div>
 

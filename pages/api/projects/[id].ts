@@ -1,12 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { authenticateRequest, sendUnauthorized } from '../../../lib/api-helpers';
 import { prisma } from '../../../lib/prisma';
 import { sanitizeInput } from '../../../lib/validators';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const user = await authenticateRequest(req, res);
-  if (!user) return sendUnauthorized(res);
-
   const { id } = req.query;
   if (!id || Array.isArray(id)) return res.status(400).json({ error: 'ID inválido' });
 

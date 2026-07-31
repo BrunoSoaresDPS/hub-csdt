@@ -1,13 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 
 // Suporte a Vercel Postgres e DATABASE_URL local
 const prisma = new PrismaClient();
 
 async function main() {
   const email = 'admin@hubcsdt.com';
-  const password = 'Hub2026!';
-  const hashedPassword = await bcrypt.hash(password, 12);
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (!existing) {
@@ -15,7 +12,9 @@ async function main() {
       data: {
         name: 'Administrador Hub CSDT',
         email,
-        password: hashedPassword,
+        // Login por senha foi removido; o campo permanece no schema apenas
+        // para compatibilidade com bancos existentes.
+        password: 'login-desativado',
         role: 'admin',
       },
     });

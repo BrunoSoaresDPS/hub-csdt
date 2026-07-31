@@ -1,11 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { authenticateRequest, sendUnauthorized } from '../../../lib/api-helpers';
 import { prisma } from '../../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const user = await authenticateRequest(req, res);
-  if (!user) return sendUnauthorized(res);
-
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

@@ -1,11 +1,11 @@
 # Hub CSDT
 
-Plataforma fullstack em Next.js para gestão de projetos com formulário público e painel administrativo protegido.
+Plataforma fullstack em Next.js para gestão de projetos com formulário público e painel administrativo de acesso livre (sem senha).
 
 ## Funcionalidades
 
 - Cadastro público de projetos sem login
-- Autenticação segura com JWT e senhas criptografadas
+- Painel administrativo de acesso direto, sem senha
 - Dashboard de projetos com busca e filtros
 - Visualização de detalhes, edição, exclusão e registro de alterações
 - Upload de arquivos local para anexos de projeto
@@ -16,7 +16,6 @@ Plataforma fullstack em Next.js para gestão de projetos com formulário públic
 - Frontend: Next.js + React + Tailwind CSS
 - Backend: API Routes do Next.js
 - Banco de dados: PostgreSQL via Prisma ORM
-- Autenticação: JWT + cookies HTTP-only
 
 ## Instalação local
 
@@ -40,7 +39,7 @@ npx prisma generate
 npx prisma migrate dev --name init
 ```
 
-5. Crie o usuário administrativo:
+5. Crie o registro interno de administrador (usado como autor dos projetos):
 
 ```bash
 npm run seed
@@ -52,22 +51,15 @@ npm run seed
 npm run dev
 ```
 
-Acesse `http://localhost:3000`.
-
-## Usuário administrativo padrão
-
-- Email: `admin@hubcsdt.com`
-- Senha: `Hub2026!`
-
-> Altere a senha do administrador em produção imediatamente.
+Acesse `http://localhost:3000`. O painel administrativo fica disponível diretamente em `/dashboard`, sem login.
 
 ## Deploy no Vercel
 
 1. Faça commit do projeto em um repositório GitHub.
 2. Conecte o repositório em [Vercel](https://vercel.com).
 3. Defina as variáveis de ambiente no painel Vercel:
-   - `DATABASE_URL`
-   - `JWT_SECRET`
+   - `POSTGRES_PRISMA_URL`
+   - `POSTGRES_URL_NON_POOLING`
 4. Execute o deploy.
 
 ### Observação de upload
@@ -78,12 +70,12 @@ O upload de arquivos é salvo em `public/uploads`. No Vercel, o armazenamento lo
 
 - `app/` — páginas e layout do Next.js
 - `pages/api/` — rotas da API
-- `lib/` — lógica de autenticação e helpers
+- `lib/` — helpers e validações
 - `components/` — componentes reutilizáveis
 - `prisma/` — esquema e seed do banco
 
 ## Notas de produção
 
-- Mantenha `JWT_SECRET` seguro
 - Use PostgreSQL em produção
 - Atualize as políticas de CORS se necessário
+- O painel não exige senha: qualquer pessoa com o link pode visualizar, editar e excluir projetos. Se precisar restringir o acesso, proteja a URL na camada de rede (ex.: Vercel Deployment Protection, VPN ou proxy com autenticação).

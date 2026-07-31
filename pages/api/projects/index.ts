@@ -1,12 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { authenticateRequest, sendUnauthorized } from '../../../lib/api-helpers';
 import { prisma } from '../../../lib/prisma';
 import { validateProjectPayload, sanitizeInput } from '../../../lib/validators';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const user = await authenticateRequest(req, res);
-  if (!user) return sendUnauthorized(res);
-
   if (req.method === 'GET') {
     const { status, owner, priority, complexity, impactFinancial, impactTime, search, startDate, endDate, page = '1', pageSize = '10' } = req.query;
     const pageNumber = Math.max(Number(page), 1);
@@ -50,6 +46,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const errors = validateProjectPayload(data);
     if (errors.length) return res.status(400).json({ error: errors.join(' ') });
 
+    const admin = await prisma.user.findFirst();
+    if (!admin) {
+      return res.status(500).json({ error: 'Nenhum administrador configurado.' });
+    }
+
     const project = await prisma.project.create({
       data: {
         title: sanitizeInput(data.title),
@@ -60,10 +61,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         endDate: new Date(data.endDate),
         status: data.status,
         priority: data.priority,
-        authorId: user.id,
+        authorId: admin.id,
         changeLogs: {
           create: {
-            message: 'Projeto criado pelo usuário autenticado.',
+            message: 'Projeto criado pelo painel.',
           },
         },
       },
